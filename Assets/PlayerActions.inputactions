@@ -59,6 +59,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PreviewStart",
+                    "type": "Button",
+                    "id": "f005cc9a-4dec-40dc-875b-56b2bae8a9db",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -76,10 +85,10 @@
                 {
                     "name": "",
                     "id": "74d37f80-0062-4474-870e-c1da83c4fa8a",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/h",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Harvest",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -90,7 +99,7 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "RotateLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -101,7 +110,7 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "RotateRight",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -112,7 +121,7 @@
                     "path": "<Keyboard>/equals",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "MinimapZoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -123,7 +132,7 @@
                     "path": "<Keyboard>/minus",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "MinimapZoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -134,7 +143,7 @@
                     "path": "<Keyboard>/numpadPlus",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "MinimapZoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -145,7 +154,7 @@
                     "path": "<Keyboard>/numpadMinus",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "MinimapZoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -156,8 +165,19 @@
                     "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "ToggleBuildMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d36f0ac-b76d-4a45-b773-9e8d8fedf725",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PreviewStart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -240,7 +260,7 @@
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -262,7 +282,7 @@
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "ConfirmBuild",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -284,7 +304,7 @@
                     "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "ExitBuildMode",
                     "isComposite": false,
                     "isPartOfComposite": false

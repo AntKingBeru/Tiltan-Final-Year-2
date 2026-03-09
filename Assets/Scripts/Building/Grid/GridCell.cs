@@ -1,7 +1,13 @@
 using UnityEngine;
 
-public class GridCell : MonoBehaviour
+public class GridCell
 {
-    public bool occupied;
-    // TODO: add logic
+    public Vector2Int Position;
+    public bool Occupied;
+
+    public GridCell(Vector2Int pos)
+    {
+        Position = pos;
+        Occupied = false;
+    }
 }
