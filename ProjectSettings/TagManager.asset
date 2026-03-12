@@ -37,12 +37,12 @@ TagManager:
   - 
   - 
   - Preview
-  - MimimapIcons
+  - Mimimap
   m_SortingLayers:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: MinimapIcons
+  - name: Minimap
     uniqueID: 934701851
     locked: 0
   m_RenderingLayers:
