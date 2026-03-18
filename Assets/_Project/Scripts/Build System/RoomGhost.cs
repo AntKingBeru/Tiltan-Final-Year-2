@@ -2,77 +2,75 @@ using UnityEngine;
 
 public class RoomGhost : MonoBehaviour
 {
-    private RoomBlueprint _blueprint;
-    private Camera _cam;
-    private bool _canPlace;
-    private Renderer[] _renderers;
-    private Material _validMaterial;
-    private Material _invalidMaterial;
-    private float _cellSize;
+    private const string BaseColorName = "_BaseColor";
+    private const string EmissionColorName = "_EmissionColor";
+    
+    [Header("Settings")]
+    [SerializeField] private bool useEmission = true;
+    [SerializeField] private float emissionMultiplier = 2f;
+    
+    [Header("Renderers")]
+    [SerializeField] private Renderer[] renderers;
+    
+    private MaterialPropertyBlock _block;
 
-    public void Initialize(
-        RoomBlueprint blueprint,
-        Camera cam,
-        GhostMaterialSettings materials)
+    // Shader property IDs (URP)
+    private static readonly int BaseColorID = Shader.PropertyToID(BaseColorName);
+    private static readonly int EmissionColorID = Shader.PropertyToID(EmissionColorName);
+
+    private void Awake()
     {
-        _blueprint = blueprint;
-        _cam = cam;
-        
-        _validMaterial = materials.validMaterial;
-        _invalidMaterial = materials.invalidMaterial;
-        
-        _renderers = GetComponentsInChildren<Renderer>();
-        
-        _cellSize = DungeonGrid.Instance.CellSize;
+        _block = new MaterialPropertyBlock();
     }
 
-    private void Update()
+    // <summary>
+    // Sets the color of the ghost (supports transparency + emission)
+    // </summary>
+    public void SetColor(Color color)
     {
-        UpdatePosition();
-        ValidatePlacement();
-        UpdateMaterial();
-    }
+        if (renderers == null || renderers.Length == 0)
+            return;
 
-    private void UpdatePosition()
-    {
-        var gridPos = GridUtility.GetMouseGridPosition(_cam);
-        
-        var basePos = DungeonGrid.Instance.GridToWorld(gridPos);
-
-        var offset = new Vector3(
-            (_blueprint.size.x - 1) * _cellSize * 0.5f,
-            0,
-            (_blueprint.size.y - 1) * _cellSize * 0.5f
-        );
-        
-        transform.position = basePos + offset;
-    }
-
-    private void ValidatePlacement()
-    {
-        var gridPos = GridUtility.GetMouseGridPosition(_cam);
-
-        var gridValid = DungeonGrid.Instance.AreCellsCleared(
-            gridPos,
-            _blueprint.size
-        );
-        
-        var affordable = ResourceManager.Instance.CanAfford(
-            _blueprint.stoneCost,
-            _blueprint.woodCost
-        );
-        
-        _canPlace = gridValid && affordable;
-    }
-
-    private void UpdateMaterial()
-    {
-        var material = _canPlace ? _validMaterial : _invalidMaterial;
-
-        foreach (var r in _renderers) r.material = material;
+        foreach (var r in renderers)
+        {
+            if (!r)
+                continue;
+            
+            r.GetPropertyBlock(_block);
+            
+            // Base color (handles transparency using alpha)
+            _block.SetColor(BaseColorID, color);
+            
+            // Optional emission for glow effect
+            if (useEmission)
+                _block.SetColor(EmissionColorID, color * emissionMultiplier);
+            
+            r.SetPropertyBlock(_block);
+        }
     }
     
-    public bool CanPlace() => _canPlace;
+    // <summary>
+    // Convenience method to set the color by validity
+    // </summary>
+    public void SetValidity(bool isValid)
+    {
+        SetColor(isValid ? Color.green : Color.red);
+    }
     
-    public Vector2Int GetGridPosition() => GridUtility.GetMouseGridPosition(_cam);
+    // <summary>
+    // Optional: clear all overrides (rarely needed)
+    // </summary>
+    public void Clear()
+    {
+        if (renderers == null)
+            return;
+        
+        foreach (var r in renderers)
+        {
+            if (!r)
+                continue;
+            
+            r.SetPropertyBlock(null);
+        }
+    }
 }
