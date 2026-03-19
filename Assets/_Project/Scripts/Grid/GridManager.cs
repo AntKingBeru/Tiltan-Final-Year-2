@@ -17,6 +17,8 @@ public class GridManager : MonoBehaviour
     [Header("Parents")]
     [SerializeField] private Transform gridParent;
     
+    [SerializeField] private InitialRoomPlacer initialRoomPlacer;
+    
     private Dictionary<Vector2Int, GridCell> _grid = new();
     
     public IReadOnlyDictionary<Vector2Int, GridCell> Grid => _grid;
@@ -66,6 +68,8 @@ public class GridManager : MonoBehaviour
                 _grid.Add(pos, cell);
             }
         }
+        
+        initialRoomPlacer.GenerateInitialRooms();
     }
 
     [ContextMenu("Clear Grid")]
@@ -123,8 +127,9 @@ public class GridManager : MonoBehaviour
         
         cell.CellType = CellType.Cleared;
         cell.View.UpdateView();
-        
-        // TODO: Add resource gain here (ResourceManager)
+
+        var amount = cell.ResourceType == ResourceType.Wood ? 2 : 1;
+        ResourceManager.Instance.Add(cell.ResourceType, amount);
     }
 
     public void OccupyCell(Vector2Int pos)
@@ -135,6 +140,28 @@ public class GridManager : MonoBehaviour
         
         cell.CellType = CellType.Occupied;
         cell.View.UpdateView();
+    }
+
+    public void ForceClearArea(Vector2Int origin, Vector2Int size)
+    {
+        for (var x = 0; x < size.x; x++)
+        {
+            for (var y = 0; y < size.y; y++)
+            {
+                var pos = origin + new Vector2Int(x, y);
+                
+                if (!IsInsideGrid(pos))
+                    continue;
+                
+                var cell = GetCell(pos);
+
+                if (cell.CellType == CellType.Blocked)
+                {
+                    cell.CellType = CellType.Cleared;
+                    cell.View.UpdateView();
+                }
+            }
+        }
     }
     
     #endregion

@@ -11,6 +11,7 @@ public class BuildManager : MonoBehaviour
     public bool IsBuildMode { get; private set; }
 
     public RoomBlueprint SelectedRoom { get; private set; }
+    public TrapBlueprint SelectedTrap { get; private set; }
 
     private void Awake()
     {
@@ -39,6 +40,12 @@ public class BuildManager : MonoBehaviour
     public void SelectRoom(RoomBlueprint room)
     {
         SelectedRoom = room;
+    }
+    
+    public void SelectTrap(TrapBlueprint trap)
+    {
+        SelectedTrap = trap;
+        SelectedRoom = null;
     }
 
     public void ClearSelection()

@@ -92,7 +92,10 @@ public class RoomPlacementSystem : MonoBehaviour
 
         _currentOrigin = gridPos;
         
-        var canPlace = GridManager.Instance.CanPlaceRoom(_currentOrigin, size);
+        var gridValid = GridManager.Instance.CanPlaceRoom(_currentOrigin, size);
+        var costValid = ResourceManager.Instance.CanAfford(room.stoneCost, room.woodCost);
+        
+        var canPlace = gridValid && costValid;
         
         // Spawn ghost if needed
         if (!_currentGhost)
@@ -147,6 +150,9 @@ public class RoomPlacementSystem : MonoBehaviour
 
     private void PlaceRoom(RoomBlueprint room, Vector2Int origin, Vector2Int size)
     {
+        if (!ResourceManager.Instance.TrySpend(room.stoneCost, room.woodCost))
+            return;
+        
         var worldPos = GridManager.Instance.GridToWorld(origin);
 
         var roomObj = Instantiate(
@@ -155,12 +161,17 @@ public class RoomPlacementSystem : MonoBehaviour
             Quaternion.Euler(0f, _rotationIndex * 90f, 0f)
         );
         
+        var roomComponent = roomObj.GetComponent<Room>();
+
+        if (roomComponent)
+        {
+            roomComponent.Initialize(origin, size, room.blocksEnemies);
+            RoomRegistry.Instance.Register(roomComponent);
+        }
+        
         GridManager.Instance.OccupyArea(origin, size);
         
-        // TODO:
-        // - Register room
-        // - Bake NavMesh
-        // - Register trap anchors
+        // NavMeshManager.Instance.Rebuild();
     }
     
     #endregion
