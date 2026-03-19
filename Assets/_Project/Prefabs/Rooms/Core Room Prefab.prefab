@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 7724646722442004847}
   - component: {fileID: 5034226167867996571}
   - component: {fileID: 2237574949236862015}
+  - component: {fileID: 3351153784625186215}
   m_Layer: 6
   m_Name: Core
   m_TagString: Untagged
@@ -442,6 +443,19 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &3351153784625186215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096761629496160771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14325dfa19fa354ba69ec68beef06ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core
+  health: 500
 --- !u!1 &7486792598990561545
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,6 +561,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1426631364273590797}
+  - component: {fileID: 6976500017741719357}
   m_Layer: 6
   m_Name: Core Room Prefab
   m_TagString: Untagged
@@ -574,6 +589,26 @@ Transform:
   - {fileID: 8420861352802493284}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6976500017741719357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9022852788908176509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: f2652fae
 --- !u!1001 &316844132290379757
 PrefabInstance:
   m_ObjectHideFlags: 0

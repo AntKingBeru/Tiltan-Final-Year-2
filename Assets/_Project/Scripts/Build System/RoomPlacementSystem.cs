@@ -1,8 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.AI.Navigation;
+using UnityEngine.AI;
 
 public class RoomPlacementSystem : MonoBehaviour
 {
+    private const string WalkableName = "Walkable";
+    private const string NotWalkableName = "Not Walkable";
+    
     [Header("Input")]
     [SerializeField] private InputActionReference rotateAction;
     [SerializeField] private InputActionReference placeAction;
@@ -169,9 +174,19 @@ public class RoomPlacementSystem : MonoBehaviour
             RoomRegistry.Instance.Register(roomComponent);
         }
         
+        var navModifier = roomObj.GetComponent<NavMeshModifier>();
+
+        if (navModifier)
+        {
+            navModifier.overrideArea = true;
+            navModifier.area = room.blocksEnemies
+                ? NavMesh.GetAreaFromName(NotWalkableName)
+                : NavMesh.GetAreaFromName(WalkableName);
+        }
+        
         GridManager.Instance.OccupyArea(origin, size);
         
-        // NavMeshManager.Instance.Rebuild();
+        NavMeshManager.Instance.Rebuild();
     }
     
     #endregion
