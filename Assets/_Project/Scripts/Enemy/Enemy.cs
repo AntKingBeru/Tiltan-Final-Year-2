@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
+    private const string EnemyWalkable = "EnemyWalkable";
+    
     [Header("Stats")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float damage = 10f;
@@ -13,11 +15,12 @@ public class Enemy : MonoBehaviour, IDamageable
     
     private Core _core;
     private float _lastAttackTime;
-
+    
     public void Initialize(Core core)
     {
         _core = core;
         agent.SetDestination(core.transform.position);
+        agent.areaMask = 1 << NavMesh.GetAreaFromName(EnemyWalkable);
     }
 
     private void Update()

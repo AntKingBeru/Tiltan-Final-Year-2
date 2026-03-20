@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.AI.Navigation;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class RoomPlacementSystem : MonoBehaviour
 {
-    private const string WalkableName = "Walkable";
-    private const string NotWalkableName = "Not Walkable";
+    private const string EnemyWalkable = "EnemyWalkable";
+    private const string MinionWalkable = "MinionWalkable";
     
     [Header("Input")]
     [SerializeField] private InputActionReference rotateAction;
@@ -174,14 +174,17 @@ public class RoomPlacementSystem : MonoBehaviour
             RoomRegistry.Instance.Register(roomComponent);
         }
         
-        var navModifier = roomObj.GetComponent<NavMeshModifier>();
+        var modifier = roomObj.GetComponent<NavMeshModifier>();
 
-        if (navModifier)
+        if (modifier)
         {
-            navModifier.overrideArea = true;
-            navModifier.area = room.blocksEnemies
-                ? NavMesh.GetAreaFromName(NotWalkableName)
-                : NavMesh.GetAreaFromName(WalkableName);
+            modifier.overrideArea = true;
+
+            modifier.area = NavMesh.GetAreaFromName(
+                room.blocksEnemies
+                ? MinionWalkable
+                : EnemyWalkable
+            );
         }
         
         GridManager.Instance.OccupyArea(origin, size);

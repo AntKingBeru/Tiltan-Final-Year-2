@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [ExecuteAlways]
 public class GridManager : MonoBehaviour
@@ -113,6 +114,20 @@ public class GridManager : MonoBehaviour
     {
         var cell = GetCell(pos);
         return cell is { IsWalkable: true };
+    }
+
+    public List<Vector2Int> GetEdgeCells()
+    {
+        return _grid.Select(kvp => kvp.Key).Where(
+                pos => pos.x == 0 || pos.x == width - 1||
+                       pos.y == 0 || pos.y == height - 1)
+            .ToList();
+    }
+
+    public List<Vector2Int> GetValidEnemyEntryCells()
+    {
+        return (from pos in GetEdgeCells() let cell = GetCell(pos)
+            where cell.CellType is CellType.Cleared or CellType.Occupied select pos).ToList();
     }
     
     #endregion
