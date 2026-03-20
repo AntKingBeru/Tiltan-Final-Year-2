@@ -4,28 +4,45 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IDamageable
 {
     private const string EnemyWalkable = "EnemyWalkable";
+    private const int MaxHits = 20;
     
     [Header("Stats")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float damage = 10f;
     [SerializeField] private float attackRate = 1f;
+    [SerializeField] private float detectionRange = 5f;
+    
+    [Header("Death")]
+    [SerializeField] private GameObject corpsePrefab;
     
     [Header("AI")]
     [SerializeField] private NavMeshAgent agent;
     
     private Core _core;
+    
     private float _lastAttackTime;
+
+    private IDamageable _targetDamageable;
+    private Transform _targetTransform;
+    
+    private readonly Collider[] _hitsBuffer = new Collider[MaxHits];
+
+    private void Awake()
+    {
+        agent.areaMask = 1 << NavMesh.GetAreaFromName(EnemyWalkable);
+    }
     
     public void Initialize(Core core)
     {
         _core = core;
-        agent.SetDestination(core.transform.position);
-        agent.areaMask = 1 << NavMesh.GetAreaFromName(EnemyWalkable);
+        SetTarget(core, core.transform);
     }
 
     private void Update()
     {
-        if (!_core)
+        FindTarget();
+        
+        if (!_targetTransform)
             return;
 
         var dist = Vector3.Distance(
@@ -38,6 +55,54 @@ public class Enemy : MonoBehaviour, IDamageable
         else
             agent.SetDestination(_core.transform.position);
     }
+    
+    #region Targeting
+
+    private void FindTarget()
+    {
+        var count = Physics.OverlapSphereNonAlloc(
+            transform.position,
+            detectionRange,
+            _hitsBuffer
+        );
+        
+        var closestDist = float.MaxValue;
+        Minion best = null;
+
+        for (var i = 0; i < count; i++)
+        {
+            var hit = _hitsBuffer[i];
+            
+            if (hit.TryGetComponent(out Minion minion))
+            {
+                var dist = Vector3.Distance(
+                    transform.position,
+                    minion.transform.position
+                );
+                
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    best = minion;
+                }
+            }
+            
+            if (best)
+                SetTarget(best, best.transform);
+            else
+                SetTarget(_core, _core.transform);
+        }
+    }
+    
+    private void SetTarget(IDamageable damageable, Transform target)
+    {
+        _targetDamageable = damageable;
+        _targetTransform = target;
+    }
+    
+    #endregion
+    
+    #region Combat
 
     private void Attack()
     {
@@ -49,6 +114,10 @@ public class Enemy : MonoBehaviour, IDamageable
         _core.TakeDamage(damage);
     }
     
+    #endregion
+    
+    #region Damage + Death
+    
     public void TakeDamage(float amount)
     {
         health -= amount;
@@ -59,7 +128,11 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        // TODO: Spawn corpse
+        if (corpsePrefab)
+            Instantiate(corpsePrefab, transform.position, Quaternion.identity);
+        
         Destroy(gameObject);
     }
+    
+    #endregion   
 }

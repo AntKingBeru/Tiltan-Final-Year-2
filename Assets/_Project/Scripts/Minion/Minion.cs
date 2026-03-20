@@ -4,12 +4,12 @@ using UnityEngine.AI;
 public class Minion : MonoBehaviour, IDamageable
 {
     private const string MinionWalkable = "MinionWalkable";
-    private const int MaxHits = 30;
+    private const int MaxHits = 20;
     
     [Header("Stats")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float moveSpeed = 3.5f;
-    [SerializeField] private float carryCapacity = 10f;
+    [SerializeField] private int carryCapacity = 5;
 
     [Header("Combat")]
     [SerializeField] private float attackDamage = 10f;
@@ -54,21 +54,8 @@ public class Minion : MonoBehaviour, IDamageable
                 break;
         }
     }
-
-    public void TakeDamage(float amount)
-    {
-        health -= amount;
-
-        if (health <= 0)
-            Die();
-    }
-
-    private void Die()
-    {
-        // TODO: add death logic
-    }
     
-    #region Setters
+    #region Tasks
 
     public void SetGatherTask(GridCell cell, Transform storage)
     {
@@ -114,7 +101,7 @@ public class Minion : MonoBehaviour, IDamageable
         GridManager.Instance.ClearCell(_targetCell.Position);
 
         _carriedType = _targetCell.ResourceType;
-        _carriedAmount += 1;
+        _carriedAmount = carryCapacity;
         
         _currentTask = MinionTask.Delivering;
 
@@ -156,18 +143,18 @@ public class Minion : MonoBehaviour, IDamageable
     {
         FindEnemy();
 
-        if (_currentEnemy)
-        {
-            var dist = Vector3.Distance(
-                transform.position,
-                _currentEnemy.transform.position
-            );
-
-            if (dist <= agent.stoppingDistance + 1)
-                AttackEnemy();
-            else
-                MoveTo(_currentEnemy.transform.position);
-        }
+        if (!_currentEnemy)
+            return;
+        
+        var dist = Vector3.Distance(
+            transform.position,
+            _currentEnemy.transform.position
+        );
+    
+        if (dist <= agent.stoppingDistance + 0.5f)
+            AttackEnemy();
+        else
+            MoveTo(_currentEnemy.transform.position);
     }
 
     private void FindEnemy()
@@ -177,6 +164,9 @@ public class Minion : MonoBehaviour, IDamageable
             detectionRange,
             _hitsBuffer
         );
+        
+        var closestDist = float.MaxValue;
+        Enemy best = null;
 
         for (var i = 0; i < count; i++)
         {
@@ -184,16 +174,27 @@ public class Minion : MonoBehaviour, IDamageable
 
             if (hit.TryGetComponent(out Enemy enemy))
             {
-                _currentEnemy = enemy;
-                return;
+                var dist = Vector3.Distance(
+                    transform.position,
+                    enemy.transform.position
+                );
+
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    best = enemy;
+                }
             }
         }
 
-        _currentEnemy = null;
+        _currentEnemy = best;
     }
 
     private void AttackEnemy()
     {
+        if (!_currentEnemy)
+            return;
+        
         if (Time.time - _lastAttackTime < attackRate)
             return;
         
@@ -209,6 +210,24 @@ public class Minion : MonoBehaviour, IDamageable
     private void MoveTo(Vector3 position)
     {
         agent.SetDestination(position);
+    }
+    
+    #endregion
+    
+    #region Damage + Death
+    
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+
+        if (health <= 0)
+            Die();
+    }
+
+    private void Die()
+    {
+        MinionManager.Instance.UnregisterMinion(this);
+        Destroy(gameObject);   
     }
     
     #endregion
