@@ -55118,7 +55118,6 @@ MonoBehaviour:
   totalWaves: 10
   timeBetweenWaves: 10
   baseEnemyCount: 3
-  core: {fileID: 0}
 --- !u!114 &1158385200
 MonoBehaviour:
   m_ObjectHideFlags: 0
