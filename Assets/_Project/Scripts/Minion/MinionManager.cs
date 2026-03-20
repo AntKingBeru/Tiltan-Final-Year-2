@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MinionManager : MonoBehaviour
 {
@@ -10,11 +11,15 @@ public class MinionManager : MonoBehaviour
     [SerializeField] private int maxMinions = 5;
     
     private readonly List<Minion> _minions = new();
+    
+    public Transform Storage => storage;
 
     private void Awake()
     {
         Instance = this;
     }
+    
+    #region Spawning
 
     public void SpawnMinion(Vector3 position)
     {
@@ -34,20 +39,56 @@ public class MinionManager : MonoBehaviour
         _minions.Remove(minion);
     }
     
+    #endregion
+    
+    #region Task Assignment
+    
     public void AssignGatheringTask(GridCell cell)
     {
-        foreach (var minion in _minions)
-        {
-            minion.SetGatherTask(cell, storage);
+        var minion = GetFreeMinion();
+
+        if (!minion)
             return;
-        }
+        
+        minion.AddTask(new MinionTaskData(
+            MinionTask.Gathering,
+            cell,
+            50
+        ));
     }
     
     public void SetAllToPatrol()
     {
         foreach (var minion in _minions)
         {
-            minion.SetPatrol();
+            minion.AddTask(new MinionTaskData(
+                MinionTask.Patrol,
+                null,
+                100
+            ));
         }
     }
+    
+    #endregion
+    
+    #region Auto Assignment
+
+    public void AutoAssignGathering()
+    {
+        foreach (var cell in GridManager.Instance.Grid.Values)
+        {
+            if (cell.CellType == CellType.Blocked)
+            {
+                AssignGatheringTask(cell);
+                return;
+            }
+        }
+    }
+
+    private Minion GetFreeMinion()
+    {
+        return _minions.FirstOrDefault(minion => minion.IsIdle());
+    }
+
+    #endregion
 }

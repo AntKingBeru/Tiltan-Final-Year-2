@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class Minion : MonoBehaviour, IDamageable
 {
@@ -19,9 +20,10 @@ public class Minion : MonoBehaviour, IDamageable
     [Header("AI")]
     [SerializeField] private NavMeshAgent agent;
     
-    private readonly Collider[] _hitsBuffer = new Collider[MaxHits];
-    
     private MinionTask _currentTask = MinionTask.Idle;
+    
+    private readonly Collider[] _hitsBuffer = new Collider[MaxHits];
+    private readonly List<MinionTaskData> _taskQueue = new();
     
     private GridCell _targetCell;
     private Transform _storage;
@@ -30,7 +32,6 @@ public class Minion : MonoBehaviour, IDamageable
     private ResourceType _carriedType;
 
     private float _lastAttackTime;
-
     private Enemy _currentEnemy;
 
     private void Awake()
@@ -41,6 +42,20 @@ public class Minion : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        FindEnemy();
+
+        if (_currentEnemy)
+        {
+            _currentTask = MinionTask.Patrol;
+            HandleCombat();
+            return;
+        }
+        
+        if (_currentTask == MinionTask.Idle && _taskQueue.Count > 0)
+        {
+            ExecuteNextTask();
+        }
+        
         switch (_currentTask)
         {
             case MinionTask.Gathering:
@@ -55,8 +70,44 @@ public class Minion : MonoBehaviour, IDamageable
         }
     }
     
-    #region Tasks
+    #region Task Queue
 
+    public void AddTask(MinionTaskData task)
+    {
+        _taskQueue.Add(task);
+        SortTasks();
+    }
+    
+    private void ExecuteNextTask()
+    {
+        var task = _taskQueue[0];
+        _taskQueue.RemoveAt(0);
+
+        switch (task.TaskType)
+        {
+            case MinionTask.Gathering:
+                SetGatherTask(task.TargetCell, MinionManager.Instance.Storage);
+                break;
+            case MinionTask.Patrol:
+                SetPatrol();
+                break;
+        }
+    }
+
+    public bool IsIdle()
+    {
+        return _currentTask == MinionTask.Idle && _taskQueue.Count == 0;
+    }
+    
+    private void SortTasks()
+    {
+        _taskQueue.Sort((a, b) => b.Priority.CompareTo(a.Priority));   
+    }
+    
+    #endregion
+    
+    #region Tasks
+    
     public void SetGatherTask(GridCell cell, Transform storage)
     {
         _targetCell = cell;
@@ -108,10 +159,6 @@ public class Minion : MonoBehaviour, IDamageable
         MoveTo(_storage.position);
     }
     
-    #endregion
-    
-    #region Delivering
-
     private void HandleDelivering()
     {
         if (!_storage)
@@ -137,24 +184,33 @@ public class Minion : MonoBehaviour, IDamageable
     
     #endregion
     
-    #region Patrol + Combat
+    #region Combat
 
-    private void HandlePatrol()
+    private void HandleCombat()
     {
-        FindEnemy();
-
         if (!_currentEnemy)
             return;
-        
+
         var dist = Vector3.Distance(
             transform.position,
             _currentEnemy.transform.position
         );
-    
+
         if (dist <= agent.stoppingDistance + 0.5f)
-            AttackEnemy();
+        {
+            if (Time.time - _lastAttackTime >= attackRate)
+            {
+                _lastAttackTime = Time.time;
+                _currentEnemy.TakeDamage(attackDamage);
+            }
+        }
         else
             MoveTo(_currentEnemy.transform.position);
+    }
+
+    private void HandlePatrol()
+    {
+        // TODO: Patrol logic
     }
 
     private void FindEnemy()
@@ -189,20 +245,7 @@ public class Minion : MonoBehaviour, IDamageable
 
         _currentEnemy = best;
     }
-
-    private void AttackEnemy()
-    {
-        if (!_currentEnemy)
-            return;
-        
-        if (Time.time - _lastAttackTime < attackRate)
-            return;
-        
-        _lastAttackTime = Time.time;
-        
-        _currentEnemy?.TakeDamage(attackDamage);
-    }
-
+    
     #endregion
     
     #region Movement

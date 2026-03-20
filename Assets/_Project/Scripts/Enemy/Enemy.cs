@@ -56,6 +56,8 @@ public class Enemy : MonoBehaviour, IDamageable
             agent.SetDestination(_core.transform.position);
     }
     
+    public NavMeshAgent GetAgent() => agent;
+    
     #region Targeting
 
     private void FindTarget()
