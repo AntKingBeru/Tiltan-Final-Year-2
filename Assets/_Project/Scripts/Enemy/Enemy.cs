@@ -4,32 +4,47 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IDamageable
 {
     private const string EnemyWalkable = "EnemyWalkable";
-    private const int MaxHits = 20;
     
     [Header("Stats")]
-    [SerializeField] private float health = 100f;
+    [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float damage = 10f;
     [SerializeField] private float attackRate = 1f;
-    [SerializeField] private float detectionRange = 5f;
+    
+    [Header("Type")]
+    [SerializeField] private EnemyType enemyType;
     
     [Header("Death")]
     [SerializeField] private GameObject corpsePrefab;
     
     [Header("AI")]
     [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private float fleeThreshold = 20f;
+    [SerializeField] private float fleeDistance = 6f;
     
+    public EnemyType EnemyType => enemyType;
+
+    private float _health;
     private Core _core;
+
+    private IDamageable _target;
+    private Transform _targetTransform;
     
     private float _lastAttackTime;
 
-    private IDamageable _targetDamageable;
-    private Transform _targetTransform;
+    private bool _isFleeing;
     
-    private readonly Collider[] _hitsBuffer = new Collider[MaxHits];
+    private Vector3 _formationOffset;
+    
+    private readonly ThreatTracker _threatTracker = new();
 
     private void Awake()
     {
+        _health = maxHealth;
+        
         agent.areaMask = 1 << NavMesh.GetAreaFromName(EnemyWalkable);
+        
+        _formationOffset = Random.insideUnitSphere * 2f;
+        _formationOffset.y = 0;
     }
     
     public void Initialize(Core core)
@@ -40,7 +55,13 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        FindTarget();
+        if (_health <= fleeThreshold && !_isFleeing)
+        {
+            HandleFlee();
+            return;
+        }
+        
+        UpdateThreatTarget();
         
         if (!_targetTransform)
             return;
@@ -50,62 +71,43 @@ public class Enemy : MonoBehaviour, IDamageable
             _core.transform.position
         );
 
-        if (dist <= agent.stoppingDistance)
+        if (dist <= agent.stoppingDistance + 0.5f)
             Attack();
         else
-            agent.SetDestination(_core.transform.position);
+            MoveTo(_core.transform.position + _formationOffset);
     }
     
     public NavMeshAgent GetAgent() => agent;
     
-    #region Targeting
-
-    private void FindTarget()
+    #region Threat System
+    
+    public void RegisterThreat(IDamageable source, float amount)
     {
-        var count = Physics.OverlapSphereNonAlloc(
-            transform.position,
-            detectionRange,
-            _hitsBuffer
-        );
-        
-        var closestDist = float.MaxValue;
-        Minion best = null;
+        _threatTracker.AddThreat(source, amount);
+    }
 
-        for (var i = 0; i < count; i++)
-        {
-            var hit = _hitsBuffer[i];
-            
-            if (hit.TryGetComponent(out Minion minion))
-            {
-                var dist = Vector3.Distance(
-                    transform.position,
-                    minion.transform.position
-                );
-                
-                if (dist < closestDist)
-                {
-                    closestDist = dist;
-                    best = minion;
-                }
-            }
-            
-            if (best)
-                SetTarget(best, best.transform);
-            else
-                SetTarget(_core, _core.transform);
-        }
+    private void UpdateThreatTarget()
+    {
+        _threatTracker.DecayThreat(5f);
+
+        var target = _threatTracker.GetHighestThreat();
+        
+        if (target != null)
+            SetTarget(target, ((MonoBehaviour)target).transform);
+        else
+            SetTarget(_core, _core.transform);
     }
     
-    private void SetTarget(IDamageable damageable, Transform target)
+    private void SetTarget(IDamageable target, Transform t)
     {
-        _targetDamageable = damageable;
-        _targetTransform = target;
+        _target = target;
+        _targetTransform = t;
     }
     
     #endregion
     
     #region Combat
-
+    
     private void Attack()
     {
         if (Time.time - _lastAttackTime < attackRate)
@@ -113,7 +115,38 @@ public class Enemy : MonoBehaviour, IDamageable
         
         _lastAttackTime = Time.time;
         
-        _core.TakeDamage(damage);
+        _target?.TakeDamage(damage);
+    }
+    
+    #endregion
+    
+    #region Movement
+
+    private void MoveTo(Vector3 pos)
+    {
+        agent.SetDestination(pos);
+    }
+    
+    #endregion
+    
+    #region Flee
+
+    private void HandleFlee()
+    {
+        if (_isFleeing)
+            return;
+        
+        _isFleeing = true;
+        
+        var dir = (transform.position - _targetTransform.position).normalized;
+        var fleePos = _targetTransform.position + dir * fleeDistance;
+        
+        MoveTo(fleePos);
+    }
+
+    private bool IsFearless()
+    {
+        return enemyType && enemyType.fearless;
     }
     
     #endregion
@@ -122,9 +155,12 @@ public class Enemy : MonoBehaviour, IDamageable
     
     public void TakeDamage(float amount)
     {
-        health -= amount;
+        if (enemyType)
+            amount *= (1f - enemyType.trapResistance);
+        
+        _health -= amount;
 
-        if (health <= 0)
+        if (_health <= 0)
             Die();
     }
 

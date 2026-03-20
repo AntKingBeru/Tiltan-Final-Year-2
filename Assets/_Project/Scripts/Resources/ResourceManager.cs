@@ -8,6 +8,8 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private int stone;
     [SerializeField] private int wood;
 
+    private int _maxCapacity = 50;
+    
     private void Awake()
     {
         Instance = this;
@@ -21,11 +23,20 @@ public class ResourceManager : MonoBehaviour
         {
             case ResourceType.Stone:
                 stone += amount;
+                if (stone > _maxCapacity)
+                    stone = _maxCapacity;
                 break;
             case ResourceType.Wood:
                 wood += amount;
+                if (wood > _maxCapacity)
+                    wood = _maxCapacity;
                 break;
         }
+    }
+
+    public void IncreaseCapacity(int bonus)
+    {
+        _maxCapacity += bonus;
     }
     
     #endregion

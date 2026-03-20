@@ -39,6 +39,11 @@ public class MinionManager : MonoBehaviour
         _minions.Remove(minion);
     }
     
+    public void IncreaseMaxMinions(int bonus)
+    {
+        maxMinions += bonus;
+    }
+    
     #endregion
     
     #region Task Assignment

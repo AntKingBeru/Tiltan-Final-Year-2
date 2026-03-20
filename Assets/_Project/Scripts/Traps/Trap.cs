@@ -1,23 +1,31 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Trap : MonoBehaviour
 {
     private const int MaxHits = 20;
     
     [Header("Config")]
-    [SerializeField] private float damage;
+    [SerializeField] private float damage = 10f;
     [SerializeField] private float cooldown = 2f;
     [SerializeField] private float triggerRadius = 2f;
+    
+    [Header("Avoidance")]
+    [Range(0f, 1f)]
     [SerializeField] private float avoidChance = 0.2f;
     
-    [Header("Detection")]
+    [Header("Targeting")]
     [SerializeField] private LayerMask targetLayer;
+
+    [Header("Upgrades")]
+    [SerializeField] private List<TrapUpgrade> upgrades;
     
     private float _lastTriggerTime;
+    private int _currentLevel;
     
     protected readonly Collider[] HitsBuffer = new Collider[MaxHits];
 
-    private void Update()
+    protected virtual void Update()
     {
         if (Time.time - _lastTriggerTime < cooldown)
             return;
@@ -25,7 +33,7 @@ public class Trap : MonoBehaviour
         TryTrigger();
     }
 
-    private void TryTrigger()
+    protected virtual void TryTrigger()
     {
         var count = Physics.OverlapSphereNonAlloc(
             transform.position,
@@ -44,7 +52,6 @@ public class Trap : MonoBehaviour
                     continue;
 
                 Activate(enemy);
-                
                 _lastTriggerTime = Time.time;
                 return;
             }
@@ -53,11 +60,36 @@ public class Trap : MonoBehaviour
 
     protected virtual void Activate(Enemy enemy)
     {
-        enemy.TakeDamage(damage);
+        var finalDamage = damage;
+        
+        if (enemy.EnemyType)
+            finalDamage *= (1f - enemy.EnemyType.trapResistance);
+        
+        enemy.TakeDamage(finalDamage);
     }
 
-    private bool ShouldAvoid(Enemy enemy)
+    protected virtual bool ShouldAvoid(Enemy enemy)
     {
+        if (enemy.EnemyType && enemy.EnemyType.ignoreTraps)
+            return true;
+        
         return Random.value < avoidChance;
     }
+
+    #region Upgrades
+    
+    public void Upgrade()
+    {
+        if (_currentLevel >= upgrades.Count)
+            return;
+
+        var upgrade = upgrades[_currentLevel];
+
+        damage += upgrade.damageBonus;
+        cooldown = Mathf.Max(0.2f, cooldown - upgrade.cooldownReduction);
+        
+        _currentLevel++;
+    }
+    
+    #endregion
 }

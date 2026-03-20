@@ -4,7 +4,8 @@ using System.Collections;
 
 public class SlowTrap : Trap
 {
-    [SerializeField] private float slowAmount = 0.5f;
+    [Header("Slow Settings")]
+    [SerializeField] private float slowMultiplier = 0.5f;
     [SerializeField] private float duration = 2f;
 
     protected override void Activate(Enemy enemy)
@@ -14,18 +15,28 @@ public class SlowTrap : Trap
         // TODO: play particle effect
 
         var agent = enemy.GetAgent();
-        
+
+        if (!agent)
+            return;
+
+        var effectiveSlow = slowMultiplier;
+
         if (agent)
-            StartCoroutine(ApplySlow(agent));
+            effectiveSlow *= (1f - enemy.EnemyType.slowResistance);
+        
+        StartCoroutine(ApplySlow(agent, effectiveSlow));
     }
 
-    private IEnumerator ApplySlow(NavMeshAgent agent)
+    private IEnumerator ApplySlow(NavMeshAgent agent, float multiplier)
     {
-        var original = agent.speed;
-        agent.speed *= slowAmount;
+        var originalSpeed = agent.speed;
+        
+        agent.speed *= multiplier;
         
         yield return new WaitForSeconds(duration);
         
-        agent.speed = original;
+        // Safety check for agent
+        if (agent)
+            agent.speed = originalSpeed;
     }
 }
