@@ -3,102 +3,59 @@
     "name": "PlayerInputActions",
     "maps": [
         {
-            "name": "Player",
+            "name": "Gameplay",
             "id": "3a02d058-68e6-402d-a5bc-40c7e144ef38",
-            "actions": [
-                {
-                    "name": "PrimaryAction",
-                    "type": "Button",
-                    "id": "b52d2551-fb51-4cdd-9a29-6c95b6ae75f6",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CancelBuildMode",
-                    "type": "Button",
-                    "id": "3581d330-c9ba-4b8c-897d-549a6a588b50",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "77f55f17-01ab-47b1-8bc2-afd28b07907c",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PrimaryAction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b0cce5bb-02c0-41c8-8c62-69e73d54fb62",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CancelBuildMode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "79c05452-8090-434b-9cc3-3bada2adf59c",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CancelBuildMode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Minimap",
-            "id": "276bad00-9b39-41de-a73c-1506853f8616",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Value",
-                    "id": "872fed20-31e5-468a-a6ce-7431eff1e6ba",
+                    "id": "eac1a6c7-def7-4de9-9ec7-613738fccdc1",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Zoom",
+                    "name": "CameraRotate",
                     "type": "Value",
-                    "id": "856fd1ef-4370-4063-84e2-13af1a060187",
+                    "id": "0ef86750-ea79-4a48-a6ab-06229c2b371e",
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "BuildModeToggle",
+                    "type": "Button",
+                    "id": "5f4e3d4d-4327-470f-b8ee-60ea4cec1fda",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "33af8c4d-7fb4-429e-b6de-607fb4e54998",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "9baff51c-ccd0-4cfa-91e5-ee379261f7e0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "b401ba91-c783-47d8-a9e7-04850b9e8179",
-                    "path": "<Mouse>/scroll/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "2D Vector",
-                    "id": "446afe17-237c-4ce9-b5e8-1edb084d5b62",
+                    "id": "c3f0cd42-84df-4606-97f6-386dd2cd2217",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -109,7 +66,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "d513cdf0-0b30-4d0b-8ed6-67bbc2607a67",
+                    "id": "7e151fad-4797-4ab1-b87d-ce4f544c0003",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -120,7 +77,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "b5d4a2a2-ecac-4f10-a640-79bc1f38aa79",
+                    "id": "d059cf33-09dc-4e38-aa12-9aff41c0f6c4",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -131,7 +88,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "89f5f94b-66a0-4ebe-89f4-61acce911d6a",
+                    "id": "e0ae8507-a284-487d-8c2f-f0c7d02bd4ac",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -142,12 +99,78 @@
                 },
                 {
                     "name": "right",
-                    "id": "c3c70dc7-0350-467c-a97c-17943dbd53d8",
+                    "id": "107b7775-5446-4dbe-a2c9-463c0dcc05a3",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "90069768-a57c-4ecc-9976-8b43c2d64de7",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BuildModeToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8aa1723-2a97-4434-a085-f7aed2f65d19",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b2eb2943-015b-453e-a743-ca70a6e3842f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "dac2f6a0-fd0a-4aa6-9081-87f7addc58b6",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraRotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "d62e01ed-57f3-47d5-b99f-8c8061b836f1",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraRotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "ff066d4b-3415-4830-a1e0-e94d7dc683f1",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraRotate",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

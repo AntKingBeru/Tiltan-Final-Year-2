@@ -12,11 +12,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Room
-  - Resource
-  - Obstacle
-  - Environment
-  - Main
+  - Grid
+  - Enemy
+  - Minion
+  - 
+  - 
   - 
   - 
   - 

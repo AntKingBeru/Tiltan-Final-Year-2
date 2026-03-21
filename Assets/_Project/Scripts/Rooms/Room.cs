@@ -3,29 +3,49 @@ using System.Collections.Generic;
 
 public class Room : MonoBehaviour
 {
-    public RoomBlueprint Blueprint { get; private set; }
-    
-    private Vector2Int _gridPosition;
-    
-    private TrapAnchor[] _anchors;
+    public Vector2Int Origin { get; private set; }
+    public Vector2Int Size { get; private set; }
 
-    public Vector2Int Size => Blueprint.size;
+    public bool BlocksEnemies { get; private set; }
+    
+    public bool CanUpgrade => _currentLevel < upgrades.Count;
+    
+    [SerializeField] private List<RoomUpgrade> upgrades;
 
-    public void Initialize(RoomBlueprint blueprint, Vector2Int gridPos)
+    private int _currentLevel;
+
+    public void Initialize(Vector2Int origin, Vector2Int size, bool blocksEnemies)
     {
-        Blueprint = blueprint;
-        _gridPosition = gridPos;
-        
-        _anchors = GetComponentsInChildren<TrapAnchor>();
-
-        foreach (var anchor in _anchors) anchor.SetRoom(this);
+        Origin = origin;
+        Size = size;
+        BlocksEnemies = blocksEnemies;
     }
-    
-    public Vector2Int GetGridPosition() => _gridPosition;
-    
-    public bool HasUpgrade() => Blueprint.upgrades is { Length: > 0 };
 
-    public RoomBlueprint GetUpgrade(int index) => Blueprint.upgrades[index];
+    public void Upgrade()
+    {
+        if (!CanUpgrade)
+            return;
 
-    public TrapAnchor[] GetAnchors() => _anchors;
+        var upgrade = upgrades[_currentLevel];
+
+        if (!ResourceManager.Instance.CanAfford(upgrade.stoneCost, upgrade.woodCost))
+            return;
+
+        ResourceManager.Instance.TrySpend(upgrade.stoneCost, upgrade.woodCost);
+        
+        ApplyUpgrade(upgrade);
+        
+        _currentLevel++;
+    }
+
+    private void OnMouseDown()
+    {
+        if (!BuildManager.Instance.IsBuildMode)
+            BuildManager.Instance.UpgradeUI.Show(this);
+    }
+
+    protected virtual void ApplyUpgrade(RoomUpgrade upgrade)
+    {
+        // Override in children
+    }
 }

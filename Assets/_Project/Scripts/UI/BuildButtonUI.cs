@@ -4,62 +4,42 @@ using TMPro;
 
 public class BuildButtonUI : MonoBehaviour
 {
-    [SerializeField] private Image icon;
-    [SerializeField] private TMP_Text costText;
     [SerializeField] private Button button;
-    
-    private RoomBlueprint _roomBlueprint;
-    private TrapBlueprint _trapBlueprint;
+    [SerializeField] private TMP_Text label;
+    [SerializeField] private TMP_Text costText;
 
-    public void InitializeRoom(RoomBlueprint blueprint)
+    private RoomBlueprint _room;
+    private TrapBlueprint _trap;
+
+    public void Setup(RoomBlueprint room)
     {
-        _roomBlueprint = blueprint;
+        _room = room;
+        _trap = null;
 
-        icon.sprite = blueprint.icon;
-        
-        if (blueprint.stoneCost != 0)
+        label.text = room.name;
+        costText.text = $"S:{room.stoneCost} W:{room.woodCost}";
+
+        button.onClick.AddListener(() =>
         {
-            costText.text = blueprint.woodCost != 0 ? $"{blueprint.stoneCost} Stone/ {blueprint.woodCost} Wood" : $"{blueprint.stoneCost} Stone";
-        }
-        else
-        {
-            if (blueprint.woodCost != 0)
-            {
-                costText.text = $"{blueprint.woodCost} Wood";
-            }
-        }
+            BuildManager.Instance.SelectRoom(_room);
+        });
         
-        button.onClick.AddListener(OnClickedRoom);
+        button.interactable = ResourceManager.Instance.CanAfford(room.stoneCost, room.woodCost);
     }
     
-    public void InitializeTrap(TrapBlueprint blueprint)
+    public void Setup(TrapBlueprint trap)
     {
-        _trapBlueprint = blueprint;
-
-        icon.sprite = blueprint.icon;
+        _room = null;
+        _trap = trap;
         
-        if (blueprint.stoneCost != 0)
-        {
-            costText.text = blueprint.woodCost != 0 ? $"{blueprint.stoneCost} Stone/ {blueprint.woodCost} Wood" : $"{blueprint.stoneCost} Stone";
-        }
-        else
-        {
-            if (blueprint.woodCost != 0)
-            {
-                costText.text = $"{blueprint.woodCost} Wood";
-            }
-        }
+        label.text = trap.name;
+        costText.text = $"S:{trap.stoneCost} W:{trap.woodCost}";
         
-        button.onClick.AddListener(OnClickedTrap);
-    }
-
-    private void OnClickedRoom()
-    {
-        BuildManager.Instance.SelectRoom(_roomBlueprint);
-    }
-
-    private void OnClickedTrap()
-    {
-        BuildManager.Instance.SelectTrap(_trapBlueprint);
+        button.onClick.AddListener(() =>
+        {
+            BuildManager.Instance.SelectTrap(_trap);
+        });
+        
+        button.interactable = ResourceManager.Instance.CanAfford(trap.stoneCost, trap.woodCost);
     }
 }

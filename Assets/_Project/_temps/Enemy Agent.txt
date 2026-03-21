@@ -1,0 +1,5 @@
+Speed: 3.5
+Angular Speed: 120
+Acceleration: 8
+Stopping Distance: 1.2
+Area Mask: EnemyWalkable

@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677d6bbab2e04ab498fc1175bf969631, type: 3}
   m_Name: CoreRoom
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
-  roomName: Core Room
-  description: The heart of the dungeon, this room houses a floating orb that when
-    destroyed will destroy the enitre dungeon with it.
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  prefab: {fileID: 6374407784438422396, guid: ed46a07d9be6deb4eb3cd5435e48fc57, type: 3}
+  prefab: {fileID: 9022852788908176509, guid: 8812dddd231020340970486d90fc7a3a, type: 3}
   size: {x: 3, y: 3}
   stoneCost: 0
   woodCost: 0
-  upgrades: []
+  blocksEnemies: 0

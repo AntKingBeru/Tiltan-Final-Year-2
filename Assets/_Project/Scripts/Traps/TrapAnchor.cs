@@ -2,31 +2,19 @@ using UnityEngine;
 
 public class TrapAnchor : MonoBehaviour
 {
-    private Room _room;
+    public bool IsOccupied { get; private set; }
 
-    private GameObject _currentTrap;
-
-    public void SetRoom(Room room)
+    private void OnEnable()
     {
-        _room = room;
+        TrapAnchorRegistry.Instance?.Register(this);
     }
 
-    public bool CanPlaceTrap()
+    private void OnDisable()
     {
-        return !_currentTrap;
-    }
-
-    public void PlaceTrap(GameObject trap)
-    {
-        if (!CanPlaceTrap()) return;
-        
-        trap.transform.SetParent(transform);
-        
-        trap.transform.localPosition = Vector3.zero;
-        trap.transform.localRotation = Quaternion.identity;
-
-        _currentTrap = trap;
+        TrapAnchorRegistry.Instance?.Unregister(this);
     }
     
-    public bool HasTrap() => _currentTrap;
+    public void SetOccupied(bool value) => IsOccupied = value;
+    
+    public Vector3 GetWorldPosition() => transform.position;
 }

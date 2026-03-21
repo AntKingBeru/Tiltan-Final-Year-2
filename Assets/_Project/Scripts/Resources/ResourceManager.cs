@@ -4,41 +4,66 @@ public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
 
-    public int Stone { get; private set; }
-    public int Wood { get; private set; }
+    [Header("Resources")]
+    [SerializeField] private int stone;
+    [SerializeField] private int wood;
 
+    private int _maxCapacity = 50;
+    
     private void Awake()
     {
         Instance = this;
     }
+    
+    #region Add Resources
 
-    public void AddResource(ResourceType type, int amount)
+    public void Add(ResourceType type, int amount)
     {
         switch (type)
         {
             case ResourceType.Stone:
-                Stone += amount;
+                stone += amount;
+                if (stone > _maxCapacity)
+                    stone = _maxCapacity;
                 break;
             case ResourceType.Wood:
-                Wood += amount;
+                wood += amount;
+                if (wood > _maxCapacity)
+                    wood = _maxCapacity;
                 break;
         }
-        
-        Debug.Log($"Resources -> Stone: {Stone} | Wood: {Wood}");
     }
+
+    public void IncreaseCapacity(int bonus)
+    {
+        _maxCapacity += bonus;
+    }
+    
+    #endregion
+    
+    #region Spend Resources
 
     public bool CanAfford(int stoneCost, int woodCost)
     {
-        return Stone >= stoneCost && Wood >= woodCost;
+        return stone >= stoneCost && wood >= woodCost;
     }
 
-    public bool Spend(int stoneCost, int woodCost)
+    public bool TrySpend(int stoneCost, int woodCost)
     {
-        if (!CanAfford(stoneCost, woodCost)) return false;
+        if (!CanAfford(stoneCost, woodCost))
+            return false;
         
-        Stone -= stoneCost;
-        Wood -= woodCost;
-        
+        stone -= stoneCost;
+        wood -= woodCost;
         return true;
     }
+    
+    #endregion
+    
+    #region Debug
+    
+    public int GetStone() => stone;
+    public int GetWood() => wood;
+    
+    #endregion
 }
