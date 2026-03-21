@@ -35,10 +35,8 @@ public class WaveManager : MonoBehaviour
     private void SpawnWave(int wave)
     {
         var enemyCount = baseEnemyCount + wave * 2;
-
-        var core = FindFirstObjectByType<Core>();
         
         for (var i = 0; i < enemyCount; i++)
-            spawner.SpawnEnemy(core);
+            spawner.SpawnEnemy();
     }
 }

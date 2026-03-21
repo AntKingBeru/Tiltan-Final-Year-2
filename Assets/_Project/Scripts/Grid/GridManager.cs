@@ -126,8 +126,36 @@ public class GridManager : MonoBehaviour
 
     public List<Vector2Int> GetValidEnemyEntryCells()
     {
-        return (from pos in GetEdgeCells() let cell = GetCell(pos)
-            where cell.CellType is CellType.Cleared or CellType.Occupied select pos).ToList();
+        return (from kvp in _grid let pos = kvp.Key let cell = kvp.Value
+            where cell.IsWalkable
+            where IsEdgeCell(pos) select pos).ToList();
+    }
+
+    private bool IsEdgeCell(Vector2Int pos)
+    {
+        Vector2Int[] directions =
+        {
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
+        };
+
+        foreach (var dir in directions)
+        {
+            var neighbor = pos + dir;
+            
+            // If outside the grid or blocked -> edge cell
+            if (!IsInsideGrid(neighbor))
+                return true;
+            
+            var neighborCell = GetCell(neighbor);
+            
+            if (neighborCell is not { IsWalkable: true })
+                return true;
+        }
+
+        return false;
     }
     
     #endregion

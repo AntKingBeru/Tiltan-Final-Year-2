@@ -7,8 +7,11 @@ public class BuildManager : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference buildToggleAction;
+    
+    [SerializeField] private UpgradeUI upgradeUI;
 
     public bool IsBuildMode { get; private set; }
+    public UpgradeUI UpgradeUI => upgradeUI;
 
     public RoomBlueprint SelectedRoom { get; private set; }
     public TrapBlueprint SelectedTrap { get; private set; }
@@ -51,5 +54,10 @@ public class BuildManager : MonoBehaviour
     public void ClearSelection()
     {
         SelectedRoom = null;
+    }
+
+    public void ToggleBuildMode()
+    {
+        IsBuildMode = !IsBuildMode;
     }
 }

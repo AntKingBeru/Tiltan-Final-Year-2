@@ -38,6 +38,12 @@ public class Room : MonoBehaviour
         _currentLevel++;
     }
 
+    private void OnMouseDown()
+    {
+        if (!BuildManager.Instance.IsBuildMode)
+            BuildManager.Instance.UpgradeUI.Show(this);
+    }
+
     protected virtual void ApplyUpgrade(RoomUpgrade upgrade)
     {
         // Override in children

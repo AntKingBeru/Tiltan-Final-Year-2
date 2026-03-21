@@ -1,0 +1,39 @@
+using UnityEngine;
+
+public class BuildMenuUI : MonoBehaviour
+{
+    [Header("Prefabs")]
+    [SerializeField] private BuildButtonUI buttonPrefab;
+
+    [Header("Parents")]
+    [SerializeField] private Transform roomsParent;
+    [SerializeField] private Transform trapsParent;
+    
+    [Header("Data")]
+    [SerializeField] private RoomBlueprint[] rooms;
+    [SerializeField] private TrapBlueprint[] traps;
+
+    private void Start()
+    {
+        GenerateRooms();
+        GenerateTraps();
+    }
+
+    private void GenerateRooms()
+    {
+        foreach (var room in rooms)
+        {
+            var btn = Instantiate(buttonPrefab, roomsParent);
+            btn.Setup(room);
+        }
+    }
+    
+    private void GenerateTraps()
+    {
+        foreach (var trap in traps)
+        {
+            var btn = Instantiate(buttonPrefab, trapsParent);
+            btn.Setup(trap);
+        }
+    }   
+}
