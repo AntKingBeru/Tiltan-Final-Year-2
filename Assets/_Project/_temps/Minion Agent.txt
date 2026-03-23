@@ -1,3 +1,0 @@
-Speed: 3.5
-Stopping Distance: 1.0
-Area Mask: MinionWalkable

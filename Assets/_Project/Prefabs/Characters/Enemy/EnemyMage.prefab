@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: corpsePrefab
       value: 
       objectReference: {fileID: 4589951422986309331, guid: 4aaf29f6f5e467a42884c2ead35961fc, type: 3}
+    - target: {fileID: 5562881239264627710, guid: 8c2bc00d3e2b2c0418b24efd45ca4cb4, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 4d9fb30f9d2bd1b42ab4cdc8b236a0aa, type: 2}
     - target: {fileID: 8171515293205723259, guid: 8c2bc00d3e2b2c0418b24efd45ca4cb4, type: 3}
       propertyPath: m_Name
       value: EnemyMage

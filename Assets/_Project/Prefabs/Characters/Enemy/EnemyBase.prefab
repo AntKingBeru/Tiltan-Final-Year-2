@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5562881239264627710}
   - component: {fileID: 8150545699764373920}
   - component: {fileID: 4573375637368855170}
+  - component: {fileID: 7048144180180848613}
   m_Layer: 7
   m_Name: EnemyBase
   m_TagString: Agent
@@ -45,7 +46,7 @@ Animator:
   m_GameObject: {fileID: 8171515293205723259}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8e56fc15b10c520449b7fd5396cd778f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -99,6 +100,21 @@ MonoBehaviour:
   agent: {fileID: 8150545699764373920}
   fleeThreshold: 20
   fleeDistance: 6
+  animator: {fileID: 7048144180180848613}
+--- !u!114 &7048144180180848613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8171515293205723259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b202a334ee9bad4458fd6b0e5cd823ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAnimator
+  animator: {fileID: 5562881239264627710}
+  agent: {fileID: 8150545699764373920}
 --- !u!1001 &4950365408814529571
 PrefabInstance:
   m_ObjectHideFlags: 0

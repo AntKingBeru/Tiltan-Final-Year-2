@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private float fleeThreshold = 20f;
     [SerializeField] private float fleeDistance = 6f;
     
+    [Header("References")]
+    [SerializeField] private UnitAnimator animator;
+    
     public EnemyType EnemyType => enemyType;
 
     private float _health;
@@ -91,11 +94,19 @@ public class Enemy : MonoBehaviour, IDamageable
         _threatTracker.DecayThreat(5f);
 
         var target = _threatTracker.GetHighestThreat();
-        
+
         if (target != null)
+        {
             SetTarget(target, ((MonoBehaviour)target).transform);
+            
+            animator.SetCombat(true);
+        }
         else
+        {
             SetTarget(_core, _core.transform);
+            
+            animator.SetCombat(false);
+        }
     }
     
     private void SetTarget(IDamageable target, Transform t)
@@ -112,6 +123,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (Time.time - _lastAttackTime < attackRate)
             return;
+        
+        animator.TriggerAttack();
         
         _lastAttackTime = Time.time;
         
@@ -158,6 +171,8 @@ public class Enemy : MonoBehaviour, IDamageable
         if (enemyType)
             amount *= (1f - enemyType.trapResistance);
         
+        animator.TriggerHit();
+        
         _health -= amount;
 
         if (_health <= 0)
@@ -169,7 +184,9 @@ public class Enemy : MonoBehaviour, IDamageable
         if (corpsePrefab)
             Instantiate(corpsePrefab, transform.position, Quaternion.identity);
         
-        Destroy(gameObject);
+        animator.Die();
+        
+        Destroy(gameObject, 5f);   
     }
     
     #endregion   

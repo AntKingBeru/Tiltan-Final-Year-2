@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Minion : MonoBehaviour, IDamageable
 {
     private const string MinionWalkable = "MinionWalkable";
+    private const string EnemyWalkable = "EnemyWalkable";
     private const int MaxHits = 20;
     
     [Header("Stats")]
@@ -19,6 +20,9 @@ public class Minion : MonoBehaviour, IDamageable
     
     [Header("AI")]
     [SerializeField] private NavMeshAgent agent;
+    
+    [Header("References")]
+    [SerializeField] private UnitAnimator animator;
     
     private MinionTask _currentTask = MinionTask.Idle;
     
@@ -124,11 +128,13 @@ public class Minion : MonoBehaviour, IDamageable
     }
     
     #endregion
-    
+
     #region Gathering
 
     private void HandleGathering()
     {
+        RemoveArea(EnemyWalkable);
+        
         if (_targetCell == null)
             return;
 
@@ -198,8 +204,11 @@ public class Minion : MonoBehaviour, IDamageable
 
         if (dist <= agent.stoppingDistance + 0.5f)
         {
+            animator.SetCombat(true);
+            
             if (Time.time - _lastAttackTime >= attackRate)
             {
+                animator.TriggerAttack();
                 _lastAttackTime = Time.time;
                 _currentEnemy.TakeDamage(attackDamage);
             }
@@ -210,7 +219,7 @@ public class Minion : MonoBehaviour, IDamageable
 
     private void HandlePatrol()
     {
-        // TODO: Patrol logic
+        AddArea(EnemyWalkable);
     }
 
     private void FindEnemy()
@@ -223,6 +232,7 @@ public class Minion : MonoBehaviour, IDamageable
         
         var closestDist = float.MaxValue;
         Enemy best = null;
+        animator.SetCombat(false);
 
         for (var i = 0; i < count; i++)
         {
@@ -261,6 +271,8 @@ public class Minion : MonoBehaviour, IDamageable
     
     public void TakeDamage(float amount)
     {
+        animator.TriggerHit();
+        
         health -= amount;
 
         if (health <= 0)
@@ -270,7 +282,32 @@ public class Minion : MonoBehaviour, IDamageable
     private void Die()
     {
         MinionManager.Instance.UnregisterMinion(this);
-        Destroy(gameObject);   
+        
+        animator.Die();
+        
+        Destroy(gameObject, 5f);   
+    }
+    
+    #endregion
+    
+    #region Utility
+
+    private void AddArea(string areaName)
+    {
+        var area = NavMesh.GetAreaFromName(areaName);
+        agent.areaMask |= 1 << area;
+    }
+    
+    private void RemoveArea(string areaName)
+    {
+        var area = NavMesh.GetAreaFromName(areaName);
+        agent.areaMask &= ~(1 << area);
+    }
+
+    private bool HasArea(string areaName)
+    {
+        var area = NavMesh.GetAreaFromName(areaName);
+        return (agent.areaMask & (1 << area)) != 0;
     }
     
     #endregion
