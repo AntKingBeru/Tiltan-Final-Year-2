@@ -18,6 +18,8 @@ public class MinionManager : MonoBehaviour
     {
         Instance = this;
     }
+
+    public List<Minion> GetAll() => _minions;
     
     #region Spawning
 

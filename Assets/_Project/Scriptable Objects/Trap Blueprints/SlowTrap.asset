@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6732ae5bb79773e47958f73aa45f4942, type: 3}
   m_Name: SlowTrap
   m_EditorClassIdentifier: Assembly-CSharp::TrapBlueprint
-  prefab: {fileID: 0}
+  prefab: {fileID: 1851781300331545011, guid: 0a5f1ff1c21e37d4abc829a9e17482ff, type: 3}
+  blueprintId: Slow_Trap
   stoneCost: 2
   woodCost: 3
   damage: 2

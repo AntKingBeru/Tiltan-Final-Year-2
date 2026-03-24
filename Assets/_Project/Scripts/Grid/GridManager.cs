@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-[ExecuteAlways]
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
@@ -17,6 +16,8 @@ public class GridManager : MonoBehaviour
     
     [Header("Parents")]
     [SerializeField] private Transform gridParent;
+    [SerializeField] private Transform roomParent;
+    [SerializeField] private Transform trapParent;
     
     [SerializeField] private InitialRoomPlacer initialRoomPlacer;
     
@@ -31,6 +32,11 @@ public class GridManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        if (Application.isPlaying)
+        {
+            GenerateGrid();
+        }
     }
     
     #region Grid Generation
@@ -76,11 +82,28 @@ public class GridManager : MonoBehaviour
     [ContextMenu("Clear Grid")]
     public void ClearGrid()
     {
-        if (!gridParent) return;
-
-        for (var i = gridParent.childCount - 1; i >= 0; i--)
+        if (gridParent)
         {
-            DestroyImmediate(gridParent.GetChild(i).gameObject);
+            for (var i = gridParent.childCount - 1; i >= 0; i--) 
+            { 
+                DestroyImmediate(gridParent.GetChild(i).gameObject); 
+            }
+        }
+
+        if (roomParent)
+        {
+            for (var i = roomParent.childCount - 1; i >= 0; i--) 
+            { 
+                DestroyImmediate(roomParent.GetChild(i).gameObject); 
+            }
+        }
+
+        if (trapParent)
+        {
+            for (var i = trapParent.childCount - 1; i >= 0; i--) 
+            { 
+                DestroyImmediate(trapParent.GetChild(i).gameObject); 
+            }
         }
         
         _grid?.Clear();

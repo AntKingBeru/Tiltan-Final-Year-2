@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
   prefab: {fileID: 6633593017874189123, guid: f54db6ffd2717db418051cb1fbd992d3, type: 3}
   size: {x: 3, y: 3}
+  blueprintId: Mine
   stoneCost: 5
   woodCost: 2
   blocksEnemies: 1

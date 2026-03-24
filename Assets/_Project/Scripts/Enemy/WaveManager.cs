@@ -3,6 +3,8 @@ using System.Collections;
 
 public class WaveManager : MonoBehaviour
 {
+    public static WaveManager Instance { get; private set; }
+    
     [SerializeField] private EnemySpawner spawner;
     
     [Header("Wave Settings")]
@@ -12,7 +14,17 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int baseEnemyCount = 3;
 
     private int _currentWave;
+    
+    public int CurrentWave => _currentWave;
 
+    private void Awake()
+    {
+        if (!Instance)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+    
     private void Start()
     {
         StartCoroutine(WaveLoop());

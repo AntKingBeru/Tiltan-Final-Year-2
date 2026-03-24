@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: StorageBase
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
   prefab: {fileID: 8767684912827532223, guid: 235e81f490fd3c342b9b20cd2b2f0a4a, type: 3}
-  size: {x: 1, y: 1}
+  size: {x: 3, y: 3}
+  blueprintId: Storage_Room
   stoneCost: 3
   woodCost: 3
   blocksEnemies: 1

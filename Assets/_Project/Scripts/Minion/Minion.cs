@@ -37,6 +37,9 @@ public class Minion : MonoBehaviour, IDamageable
 
     private float _lastAttackTime;
     private Enemy _currentEnemy;
+    
+    public float CurrentHealth => health;
+    public MinionTask CurrentState => _currentTask;
 
     private void Awake()
     {

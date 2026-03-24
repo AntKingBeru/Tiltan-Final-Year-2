@@ -170,7 +170,7 @@ public class RoomPlacementSystem : MonoBehaviour
 
         if (roomComponent)
         {
-            roomComponent.Initialize(origin, size, room.blocksEnemies);
+            roomComponent.Initialize(origin, size, room.blocksEnemies, room.blueprintId, _rotationIndex);
             RoomRegistry.Instance.Register(roomComponent);
         }
         

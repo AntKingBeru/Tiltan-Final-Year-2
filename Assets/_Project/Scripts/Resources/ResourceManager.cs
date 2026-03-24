@@ -38,6 +38,12 @@ public class ResourceManager : MonoBehaviour
     {
         _maxCapacity += bonus;
     }
+
+    public void Set(int newStone, int newWood)
+    {
+        stone = newStone;
+        wood = newWood;
+    }
     
     #endregion
     

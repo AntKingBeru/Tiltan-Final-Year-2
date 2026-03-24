@@ -9,6 +9,8 @@ public class CameraController : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference rotateAction;
+    
+    [SerializeField] private Vector3 offset = new Vector3(0f, 25f, -15f);
 
     private int _index;
     private float _lastRotateTime;
@@ -53,20 +55,19 @@ public class CameraController : MonoBehaviour
 
     private void FollowTarget()
     {
-        foreach (var pivot in pivots)
-            pivot.position = target.position;
-        
-        var currentPivot = pivots[_index];
+        var pivot = pivots[_index];
+
+        var desiredPosition = target.position + pivot.rotation * offset;
 
         transform.position = Vector3.Lerp(
             transform.position,
-            currentPivot.position,
+            desiredPosition,
             lerpSpeed * Time.deltaTime
         );
 
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
-            currentPivot.rotation,
+            pivot.rotation,
             lerpSpeed * Time.deltaTime
         );
     }

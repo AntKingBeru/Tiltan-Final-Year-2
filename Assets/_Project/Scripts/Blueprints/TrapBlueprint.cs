@@ -5,6 +5,8 @@ public class TrapBlueprint : ScriptableObject
 {
     public GameObject prefab;
     
+    public string blueprintId;
+    
     [Header("Cost")]
     public int stoneCost;
     public int woodCost;

@@ -6,6 +6,8 @@ public class RoomBlueprint : ScriptableObject
     public GameObject prefab;
     public Vector2Int size;
     
+    public string blueprintId;
+    
     [Header("Cost")]
     public int stoneCost;
     public int woodCost;

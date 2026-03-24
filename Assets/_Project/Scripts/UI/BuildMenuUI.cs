@@ -17,6 +17,8 @@ public class BuildMenuUI : MonoBehaviour
     {
         GenerateRooms();
         GenerateTraps();
+        
+        ShowRooms();
     }
 
     private void GenerateRooms()
@@ -35,5 +37,17 @@ public class BuildMenuUI : MonoBehaviour
             var btn = Instantiate(buttonPrefab, trapsParent);
             btn.Setup(trap);
         }
-    }   
+    }
+
+    public void ShowRooms()
+    {
+        roomsParent.gameObject.SetActive(true);
+        trapsParent.gameObject.SetActive(false);
+    }
+    
+    public void ShowTraps()
+    {
+        trapsParent.gameObject.SetActive(true);
+        roomsParent.gameObject.SetActive(false);
+    }
 }

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 
 public class Trap : MonoBehaviour
 {
+    public int UpgradeLevel { get; private set; }
+
     private const int MaxHits = 20;
     
     [Header("Config")]
     [SerializeField] private float damage = 10f;
     [SerializeField] private float cooldown = 2f;
     [SerializeField] private float triggerRadius = 2f;
+    [SerializeField] private string blueprintId;
     
     [Header("Avoidance")]
     [Range(0f, 1f)]
@@ -24,6 +27,8 @@ public class Trap : MonoBehaviour
     private int _currentLevel;
     
     protected readonly Collider[] HitsBuffer = new Collider[MaxHits];
+    
+    public string BlueprintId => blueprintId;
 
     protected virtual void Update()
     {
@@ -89,6 +94,11 @@ public class Trap : MonoBehaviour
         cooldown = Mathf.Max(0.2f, cooldown - upgrade.cooldownReduction);
         
         _currentLevel++;
+    }
+
+    public void SetUpgradeLevel(int level)
+    {
+        UpgradeLevel = level;
     }
     
     #endregion

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6732ae5bb79773e47958f73aa45f4942, type: 3}
   m_Name: FlameTrap
   m_EditorClassIdentifier: Assembly-CSharp::TrapBlueprint
-  prefab: {fileID: 0}
+  prefab: {fileID: 8520709841476991792, guid: 4f55ceddf56db24439d2249e7128f49e, type: 3}
+  blueprintId: Flame_Trap
   stoneCost: 3
   woodCost: 4
   damage: 15

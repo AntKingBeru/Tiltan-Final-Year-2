@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
   prefab: {fileID: 0}
   size: {x: 1, y: 1}
+  blueprintId: Intersection
   stoneCost: 3
   woodCost: 2
   blocksEnemies: 0

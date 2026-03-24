@@ -13,9 +13,15 @@ public class InitialRoomPlacer : MonoBehaviour
     [SerializeField] private Vector2Int revivalOffset = new(-3, 0);
     [SerializeField] private Vector2Int barracksOffset = new(3, 0);
     [SerializeField] private Vector2Int storageOffset = new(6, 0);
+    
+    [Header("Parent")]
+    [SerializeField] private Transform roomsParent;
 
     public void GenerateInitialRooms()
     {
+        if (!roomsParent)
+            return;
+        
         PlaceRoom(coreRoom, corePosition);
 
         var revivalPos = corePosition + revivalOffset;
@@ -30,6 +36,24 @@ public class InitialRoomPlacer : MonoBehaviour
 
     private void PlaceRoom(RoomBlueprint blueprint, Vector2Int origin)
     {
+        if (!blueprint)
+        {
+            Debug.LogError("Blueprint is NULL!");
+            return;
+        }
+
+        if (!blueprint.prefab)
+        {
+            Debug.LogError($"Prefab missing in blueprint: {blueprint.name}");
+            return;
+        }
+
+        if (!roomsParent)
+        {
+            Debug.LogError("Rooms Parent is NULL!");
+            return;
+        }
+        
         var size = blueprint.size;
         
         GridManager.Instance.ForceClearArea(origin, size);
@@ -39,14 +63,24 @@ public class InitialRoomPlacer : MonoBehaviour
         var roomObj = Instantiate(
             blueprint.prefab,
             worldPos,
-            Quaternion.identity
+            Quaternion.identity,
+            roomsParent
         );
         
         var room = roomObj.GetComponent<Room>();
+
+        if (!room)
+        {
+            Debug.LogError($"Room prefab missing Room component: {blueprint.prefab.name}");
+            return;
+        }
         
-        room.Initialize(origin, size, blueprint.blocksEnemies);
+        room.Initialize(origin, size, blueprint.blocksEnemies, blueprint.blueprintId, 0);
         
-        RoomRegistry.Instance.Register(room);
+        if (RoomRegistry.Instance)
+            RoomRegistry.Instance.Register(room);
+        else
+            Debug.LogWarning("RoomRegistry not initialized yet!");
         
         GridManager.Instance.OccupyArea(origin, size);
     }

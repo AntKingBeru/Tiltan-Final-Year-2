@@ -562,6 +562,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1426631364273590797}
   - component: {fileID: 6976500017741719357}
+  - component: {fileID: 5474960895422620772}
   m_Layer: 6
   m_Name: Core Room Prefab
   m_TagString: Untagged
@@ -609,6 +610,19 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: f2652fae
+--- !u!114 &5474960895422620772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9022852788908176509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cd2c1d84b2ac5b4a83aadac42b08fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
+  upgrades: []
 --- !u!1001 &316844132290379757
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -660,22 +674,6 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ed0e28874f0c4cb4a91553b5d46f1a6c, type: 3}
       propertyPath: m_Name
       value: Door
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: ed0e28874f0c4cb4a91553b5d46f1a6c, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: ed0e28874f0c4cb4a91553b5d46f1a6c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 3245047377962470163, guid: ed0e28874f0c4cb4a91553b5d46f1a6c, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3245047377962470163, guid: ed0e28874f0c4cb4a91553b5d46f1a6c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1229,14 +1227,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7fd20cf199cb93a4986c1f3864630c06, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7fd20cf199cb93a4986c1f3864630c06, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1298,14 +1288,6 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6ac655024a0412d49a249aefbe46efe9, type: 3}
       propertyPath: m_Name
       value: column
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 6ac655024a0412d49a249aefbe46efe9, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 6ac655024a0412d49a249aefbe46efe9, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1788,14 +1770,6 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7fd20cf199cb93a4986c1f3864630c06, type: 3}
       propertyPath: m_Name
       value: Wall
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7fd20cf199cb93a4986c1f3864630c06, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7fd20cf199cb93a4986c1f3864630c06, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

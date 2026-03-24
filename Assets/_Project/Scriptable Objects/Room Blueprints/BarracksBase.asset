@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
   prefab: {fileID: 4445603525807920277, guid: b93bb80585f74924aa6618bdf0a4281f, type: 3}
   size: {x: 3, y: 3}
+  blueprintId: Barracks_Room
   stoneCost: 5
   woodCost: 5
   blocksEnemies: 1

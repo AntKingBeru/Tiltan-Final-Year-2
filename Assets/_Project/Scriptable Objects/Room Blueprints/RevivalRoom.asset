@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
   prefab: {fileID: 5756080073095644253, guid: ef37c64c9cb234a4296d4fdc0888f7d1, type: 3}
   size: {x: 3, y: 3}
+  blueprintId: Revival_Room
   stoneCost: 0
   woodCost: 0
   blocksEnemies: 1
