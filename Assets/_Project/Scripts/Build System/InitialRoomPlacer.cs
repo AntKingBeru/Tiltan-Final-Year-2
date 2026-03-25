@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class InitialRoomPlacer : MonoBehaviour
 {
@@ -34,7 +35,15 @@ public class InitialRoomPlacer : MonoBehaviour
         var storage = PlaceRoom(storageRoom, storagePos);
         
         if (storage)
-            MinionManager.Instance.SetStorage(storage.transform);
+            StartCoroutine(AssignStorageNextFrame(storage.transform));
+    }
+
+    private IEnumerator AssignStorageNextFrame(Transform storage)
+    {
+        yield return null;
+        
+        if (MinionManager.Instance)
+            MinionManager.Instance.SetStorage(storage);
     }
 
     private Room PlaceRoom(RoomBlueprint blueprint, Vector2Int origin)

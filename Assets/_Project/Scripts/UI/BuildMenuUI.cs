@@ -50,4 +50,24 @@ public class BuildMenuUI : MonoBehaviour
         trapsParent.gameObject.SetActive(true);
         roomsParent.gameObject.SetActive(false);
     }
+
+    public void OnBuildClicked()
+    {
+        BuildManager.Instance.SetBuildMode();
+    }
+    
+    public void OnClearClicked()
+    {
+        BuildManager.Instance.SetNone();
+    }
+    
+    public void OnUpgradeClicked()
+    {
+        BuildManager.Instance.SetUpgradeMode();
+    }
+    
+    public void OnCancelClicked()
+    {
+        BuildManager.Instance.SetNone();
+    }
 }

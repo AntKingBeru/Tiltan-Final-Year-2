@@ -24,6 +24,7 @@ public class BuildManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        SetNone();
     }
 
     private void OnEnable()
@@ -40,7 +41,10 @@ public class BuildManager : MonoBehaviour
 
     private void OnToggleBuild(InputAction.CallbackContext context)
     {
-        IsBuildMode = !IsBuildMode;
+        if (CurrentMode == BuildMode.Build)
+            SetNone();
+        else
+            SetBuildMode();
     }
 
     public void SelectRoom(RoomBlueprint room)
