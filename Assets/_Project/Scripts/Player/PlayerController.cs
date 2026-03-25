@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
@@ -8,61 +9,84 @@ public class PlayerController : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
     
-    [Header("Settings")]
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float moveDistance = 2f;
-    [SerializeField] private float rotationSpeed = 10f;
-    
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Camera cam;
+    [SerializeField] private Transform carryAnchor;
 
-    private void Awake()
-    {
-        agent.speed = moveSpeed;
-    }
+    private float _speed;
+    private bool _moveRequested;
+    
+    private EnemyCorpse _corpse;
+    
+    public bool HasCorpse => _corpse;
 
     private void OnEnable()
     {
         moveAction.action.Enable();
+
+        moveAction.action.performed += OnTarget;
     }
     
     private void OnDisable()
     {
+        moveAction.action.performed -= OnTarget;
+        
         moveAction.action.Disable();
     }
 
     private void Update()
     {
-        var input = moveAction.action.ReadValue<Vector2>();
+        _speed = agent.velocity.magnitude;
+        _speed = Mathf.Clamp(_speed, 0f, 1f);
 
-        if (input.sqrMagnitude < 0.01f)
+        if (!_moveRequested)
             return;
         
-        var forward = cameraTransform.forward;
-        var right = cameraTransform.right;
-        
-        forward.y = 0;
-        right.y = 0;
-        
-        forward.Normalize();
-        right.Normalize();
-        
-        var direction = forward * input.y + right * input.x;
-        
-        var target = transform.position + direction * moveDistance;
-        
-        agent.SetDestination(target);
+        _moveRequested = false;
 
-        if (direction.sqrMagnitude > 0.01f)
-        {
-            var targetRotation = Quaternion.LookRotation(direction);
-            
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                targetRotation,
-                Time.deltaTime * rotationSpeed
-            );
-        }
+        if (BuildManager.Instance.IsBuildMode)
+            return;
+
+        if (IsPointerOverUI())
+            return;
+        
+        var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        
+        if (!Physics.Raycast(ray, out var hit, 100f))
+            return;
+        
+        agent.SetDestination(hit.point);
+    }
+
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current && EventSystem.current.IsPointerOverGameObject();
+    }
+    
+    public bool TryPickUpCorpse(EnemyCorpse corpse)
+    {
+        if (_corpse)
+            return false;
+        
+        corpse.SetPlayer(this);
+
+        _corpse = corpse;
+
+        corpse.AttachTo(carryAnchor);
+
+        return true;
+    }
+
+    public EnemyCorpse DropCorpse()
+    {
+        var corpse = _corpse;
+        _corpse = null;
+        return corpse;
+    }
+
+    private void OnTarget(InputAction.CallbackContext obj)
+    {
+        _moveRequested = true;
     }
 }

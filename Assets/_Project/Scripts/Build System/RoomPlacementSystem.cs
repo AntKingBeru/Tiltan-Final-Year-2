@@ -144,6 +144,9 @@ public class RoomPlacementSystem : MonoBehaviour
 
     private void TryPlace()
     {
+        if (!BuildManager.Instance.IsBuildMode)
+            return;
+        
         var room = BuildManager.Instance.SelectedRoom;
         var size = GetRotatedSize(room.size);
         

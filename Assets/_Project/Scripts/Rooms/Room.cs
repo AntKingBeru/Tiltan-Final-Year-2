@@ -10,13 +10,11 @@ public class Room : MonoBehaviour
 
     public bool BlocksEnemies { get; private set; }
     
-    public bool CanUpgrade => _currentLevel < upgrades.Count;
+    public bool CanUpgrade => UpgradeLevel < upgrades.Count;
     
     [SerializeField] private List<RoomUpgrade> upgrades;
 
-    private int _currentLevel;
-    
-    public int UpgradeLevel => _currentLevel;
+    public int UpgradeLevel { get; private set; }
 
     public void Initialize(Vector2Int origin, Vector2Int size, bool blocksEnemies, string blueprintId, int rotationIndex)
     {
@@ -33,7 +31,7 @@ public class Room : MonoBehaviour
         if (!CanUpgrade)
             return;
 
-        var upgrade = upgrades[_currentLevel];
+        var upgrade = upgrades[UpgradeLevel];
 
         if (!ResourceManager.Instance.CanAfford(upgrade.stoneCost, upgrade.woodCost))
             return;
@@ -42,12 +40,12 @@ public class Room : MonoBehaviour
         
         ApplyUpgrade(upgrade);
         
-        _currentLevel++;
+        UpgradeLevel++;
     }
 
     public void SetUpgradeLevel(int level)
     {
-        _currentLevel = 0;
+        UpgradeLevel = 0;
 
         for (var i = 0; i < level; i++)
         {
@@ -55,7 +53,7 @@ public class Room : MonoBehaviour
                 break;
             
             ApplyUpgrade(upgrades[i]);
-            _currentLevel++;
+            UpgradeLevel++;
         }
     }
 

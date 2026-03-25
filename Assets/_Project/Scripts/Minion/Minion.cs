@@ -23,9 +23,7 @@ public class Minion : MonoBehaviour, IDamageable
     
     [Header("References")]
     [SerializeField] private UnitAnimator animator;
-    
-    private MinionTask _currentTask = MinionTask.Idle;
-    
+
     private readonly Collider[] _hitsBuffer = new Collider[MaxHits];
     private readonly List<MinionTaskData> _taskQueue = new();
     
@@ -39,7 +37,8 @@ public class Minion : MonoBehaviour, IDamageable
     private Enemy _currentEnemy;
     
     public float CurrentHealth => health;
-    public MinionTask CurrentState => _currentTask;
+    
+    public MinionTask CurrentState { get; private set; } = MinionTask.Idle;
 
     private void Awake()
     {
@@ -53,17 +52,17 @@ public class Minion : MonoBehaviour, IDamageable
 
         if (_currentEnemy)
         {
-            _currentTask = MinionTask.Patrol;
+            CurrentState = MinionTask.Patrol;
             HandleCombat();
             return;
         }
         
-        if (_currentTask == MinionTask.Idle && _taskQueue.Count > 0)
+        if (CurrentState == MinionTask.Idle && _taskQueue.Count > 0)
         {
             ExecuteNextTask();
         }
         
-        switch (_currentTask)
+        switch (CurrentState)
         {
             case MinionTask.Gathering:
                 HandleGathering();
@@ -103,7 +102,7 @@ public class Minion : MonoBehaviour, IDamageable
 
     public bool IsIdle()
     {
-        return _currentTask == MinionTask.Idle && _taskQueue.Count == 0;
+        return CurrentState == MinionTask.Idle && _taskQueue.Count == 0;
     }
     
     private void SortTasks()
@@ -119,14 +118,14 @@ public class Minion : MonoBehaviour, IDamageable
     {
         _targetCell = cell;
         _storage = storage;
-        _currentTask = MinionTask.Gathering;
+        CurrentState = MinionTask.Gathering;
         
         MoveTo(GridManager.Instance.GridToWorld(cell.Position));
     }
 
     public void SetPatrol()
     {
-        _currentTask = MinionTask.Patrol;
+        CurrentState = MinionTask.Patrol;
         _targetCell = null;
     }
     
@@ -154,7 +153,7 @@ public class Minion : MonoBehaviour, IDamageable
     {
         if (_targetCell.CellType != CellType.Blocked)
         {
-            _currentTask = MinionTask.Idle;
+            CurrentState = MinionTask.Idle;
             return;
         }
         
@@ -163,7 +162,7 @@ public class Minion : MonoBehaviour, IDamageable
         _carriedType = _targetCell.ResourceType;
         _carriedAmount = carryCapacity;
         
-        _currentTask = MinionTask.Delivering;
+        CurrentState = MinionTask.Delivering;
 
         MoveTo(_storage.position);
     }
@@ -188,7 +187,7 @@ public class Minion : MonoBehaviour, IDamageable
 
         _carriedAmount = 0;
         
-        _currentTask = MinionTask.Idle;
+        CurrentState = MinionTask.Idle;
     }
     
     #endregion

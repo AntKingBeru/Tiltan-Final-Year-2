@@ -17,6 +17,11 @@ public class NavMeshManager : MonoBehaviour
     {
         Instance = this;
     }
+
+    private void Start()
+    {
+        Rebuild();
+    }
     
     #region Public API
 

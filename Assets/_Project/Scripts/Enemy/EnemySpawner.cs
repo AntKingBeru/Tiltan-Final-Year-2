@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public static EnemySpawner Instance { get; private set; }
+    
     [Header("Setup")]
-    [SerializeField] private Enemy enemyPrefab;
+    [SerializeField] private List<Enemy> enemyPrefabs;
     [SerializeField] private Core core;
     
     [Header("Spawn Settings")]
@@ -13,15 +15,33 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float navMeshSampleRadius = 3f;
     [SerializeField] private int maxAttempts = 10;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+    
+    public void SetCore(Core coreReference) => core = coreReference;
+
     public void SpawnEnemy()
     {
+        if (!core)
+        {
+            Debug.LogWarning("Core not set!");
+            return;
+        }
+        
         var spawnPos = GetSpawnPosition();
 
         if (spawnPos == Vector3.zero)
             return;
 
+        if (enemyPrefabs == null || enemyPrefabs.Count == 0)
+            return;
+        
+        var prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
+
         var enemy = Instantiate(
-            enemyPrefab,
+            prefab,
             spawnPos,
             Quaternion.identity
         );

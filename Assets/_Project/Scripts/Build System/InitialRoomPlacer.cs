@@ -1,3 +1,4 @@
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class InitialRoomPlacer : MonoBehaviour
@@ -31,27 +32,30 @@ public class InitialRoomPlacer : MonoBehaviour
         PlaceRoom(barracksRoom, barracksPos);
 
         var storagePos = corePosition + storageOffset;
-        PlaceRoom(storageRoom, storagePos);
+        var storage = PlaceRoom(storageRoom, storagePos);
+        
+        if (storage)
+            MinionManager.Instance.SetStorage(storage.transform);
     }
 
-    private void PlaceRoom(RoomBlueprint blueprint, Vector2Int origin)
+    private Room PlaceRoom(RoomBlueprint blueprint, Vector2Int origin)
     {
         if (!blueprint)
         {
             Debug.LogError("Blueprint is NULL!");
-            return;
+            return null;
         }
 
         if (!blueprint.prefab)
         {
             Debug.LogError($"Prefab missing in blueprint: {blueprint.name}");
-            return;
+            return null;
         }
 
         if (!roomsParent)
         {
             Debug.LogError("Rooms Parent is NULL!");
-            return;
+            return null;
         }
         
         var size = blueprint.size;
@@ -72,7 +76,7 @@ public class InitialRoomPlacer : MonoBehaviour
         if (!room)
         {
             Debug.LogError($"Room prefab missing Room component: {blueprint.prefab.name}");
-            return;
+            return null;
         }
         
         room.Initialize(origin, size, blueprint.blocksEnemies, blueprint.blueprintId, 0);
@@ -83,5 +87,7 @@ public class InitialRoomPlacer : MonoBehaviour
             Debug.LogWarning("RoomRegistry not initialized yet!");
         
         GridManager.Instance.OccupyArea(origin, size);
+        
+        return room;
     }
 }

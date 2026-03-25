@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
 {
-    private const string MainMenuScene = "Main Menu";
+    private const string MainMenuScene = "MainMenu";
 
     [SerializeField] private GameObject panel;
     [SerializeField] private Slider masterSlider;
