@@ -10,7 +10,12 @@ public class BuildManager : MonoBehaviour
     
     [SerializeField] private UpgradeUI upgradeUI;
 
-    public bool IsBuildMode { get; private set; }
+    public BuildMode CurrentMode { get; private set; }
+    
+    public bool IsClearMode => CurrentMode == BuildMode.Clear;
+    public bool IsBuildMode => CurrentMode == BuildMode.Build;
+    public bool IsUpgradeMode => CurrentMode == BuildMode.Upgrade;
+    
     public UpgradeUI UpgradeUI => upgradeUI;
 
     public RoomBlueprint SelectedRoom { get; private set; }
@@ -19,8 +24,6 @@ public class BuildManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        
-        IsBuildMode = false;
     }
 
     private void OnEnable()
@@ -55,9 +58,16 @@ public class BuildManager : MonoBehaviour
     {
         SelectedRoom = null;
     }
-
-    public void ToggleBuildMode()
-    {
-        IsBuildMode = !IsBuildMode;
-    }
+    
+    #region Setters
+    
+    public void SetClearMode() => CurrentMode = BuildMode.Clear;
+    
+    public void SetBuildMode() => CurrentMode = BuildMode.Build;
+    
+    public void SetUpgradeMode() => CurrentMode = BuildMode.Upgrade;
+    
+    public void SetNone() => CurrentMode = BuildMode.None;
+    
+    #endregion
 }

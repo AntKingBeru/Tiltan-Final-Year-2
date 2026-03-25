@@ -48,6 +48,12 @@ public class PlayerController : MonoBehaviour
         if (BuildManager.Instance.IsBuildMode)
             return;
 
+        if (BuildManager.Instance.IsClearMode)
+        {
+            TryClear();
+            return;
+        }
+
         if (IsPointerOverUI())
             return;
         
@@ -62,6 +68,20 @@ public class PlayerController : MonoBehaviour
     private bool IsPointerOverUI()
     {
         return EventSystem.current && EventSystem.current.IsPointerOverGameObject();
+    }
+
+    private void TryClear()
+    {
+        if (IsPointerOverUI())
+            return;
+        
+        var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (!Physics.Raycast(ray, out var hit, 100f))
+            return;
+
+        var gridPos = GridManager.Instance.WorldToGrid(hit.point);
+        GridManager.Instance.ClearCell(gridPos);
     }
     
     public bool TryPickUpCorpse(EnemyCorpse corpse)
