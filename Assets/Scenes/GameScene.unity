@@ -58406,6 +58406,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1161204126}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SaveGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingsMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975323652235937442, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+      propertyPath: saveButton
+      value: 
+      objectReference: {fileID: 1161204127}
     - target: {fileID: 7689049012637552392, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
       propertyPath: m_Name
       value: SettingsCanvas
@@ -58420,6 +58452,28 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1464198115419748748, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
   m_PrefabInstance: {fileID: 1161204124}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1161204126 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6975323652235937442, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+  m_PrefabInstance: {fileID: 1161204124}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72e93b76b1c65c7479f898e45d1fd469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsMenu
+--- !u!114 &1161204127 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6748933304156736636, guid: 3b56677dde7dc3e408ed08181224b4f9, type: 3}
+  m_PrefabInstance: {fileID: 1161204124}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1162299283
 GameObject:
   m_ObjectHideFlags: 0
@@ -60232,6 +60286,7 @@ Transform:
   - {fileID: 1158385198}
   - {fileID: 835507988}
   - {fileID: 1047499352}
+  - {fileID: 1474936551}
   m_Father: {fileID: 1227695114}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1201433992
@@ -75089,6 +75144,51 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!1 &1474936550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1474936551}
+  - component: {fileID: 1474936552}
+  m_Layer: 0
+  m_Name: GameLoaderManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1474936551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474936550}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1199840653}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474936552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474936550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f52bc0a90570354fa8e390d880b582f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameLoader
+  initialRoomPlacer: {fileID: 310572192}
 --- !u!21 &1478318552
 Material:
   serializedVersion: 8

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class SettingsMenu : MonoBehaviour
 {
@@ -9,20 +10,38 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider masterSlider;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
+    [SerializeField] private UnityEngine.UI.Button saveButton;
 
     private void Start()
     {
+        panel.SetActive(false);
+        if (saveButton != null) saveButton.onClick.AddListener(SaveGame);
+
         var master = PlayerPrefs.GetFloat(SettingsKeys.MasterVolume, 1f);
         var music = PlayerPrefs.GetFloat(SettingsKeys.MusicVolume, 1f);
         var sfx = PlayerPrefs.GetFloat(SettingsKeys.SFXVolume, 1f);
-        
+
         masterSlider.value = master;
         musicSlider.value = music;
         sfxSlider.value = sfx;
-        
+
         masterSlider.onValueChanged.AddListener(AudioManager.Instance.SetMasterVolume);
         musicSlider.onValueChanged.AddListener(AudioManager.Instance.SetMusicVolume);
         sfxSlider.onValueChanged.AddListener(AudioManager.Instance.SetSFXVolume);
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            if (panel.activeSelf)
+                Close();
+            else
+                Open();
+        }
+
+        if (Keyboard.current.f5Key.wasPressedThisFrame)
+            SaveGame();
     }
 
     public void Open()
@@ -41,5 +60,15 @@ public class SettingsMenu : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneLoader.Instance.LoadScene(MainMenuScene);
+    }
+
+    public void SaveGame()
+    {
+        if (SaveSystem.Instance == null) { Debug.LogError("SaveSystem is null!"); return; }
+        if (WaveManager.Instance == null) { Debug.LogError("WaveManager is null!"); return; }
+
+        var slot = SaveSystem.Instance.ActiveSlot;
+        SaveSystem.Instance.Save(slot, $"Wave {WaveManager.Instance.CurrentWave}");
+        Debug.Log($"Game saved to slot {slot}");
     }
 }

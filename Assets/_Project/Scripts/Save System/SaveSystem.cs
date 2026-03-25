@@ -6,12 +6,39 @@ public class SaveSystem : MonoBehaviour
 {
     public static SaveSystem Instance { get; private set; }
 
+    public int ActiveSlot { get; private set; } = 0;
+    private int _pendingSlot = -1; // -1 = no pending load (new game)
+
     private void Awake()
     {
         if (!Instance)
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else
             Destroy(gameObject);
+    }
+
+    public void SetPendingLoad(int slot)
+    {
+        _pendingSlot = slot;
+        ActiveSlot = slot;
+    }
+
+    public void SetActiveSlot(int slot)
+    {
+        ActiveSlot = slot;
+        _pendingSlot = -1;
+    }
+
+    public bool HasPendingLoad() => _pendingSlot >= 0;
+
+    public int ConsumePendingLoad()
+    {
+        var slot = _pendingSlot;
+        _pendingSlot = -1;
+        return slot;
     }
 
     private string GetPath(int slot)

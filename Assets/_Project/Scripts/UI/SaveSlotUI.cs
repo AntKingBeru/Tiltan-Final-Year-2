@@ -7,7 +7,9 @@ public class SaveSlotUI : MonoBehaviour
 {
     [SerializeField] private Image screenshot;
     [SerializeField] private TMP_Text label;
+    [SerializeField] private bool isMainMenuMode = false;
 
+    private const string GameSceneName = "GameScene";
     private int _slotIndex;
 
     public void Initialize(int slot)
@@ -30,14 +32,20 @@ public class SaveSlotUI : MonoBehaviour
 
     public void OnClick()
     {
-        if (SaveSystem.Instance.HasSave(_slotIndex))
+        if (isMainMenuMode)
         {
-            var data = SaveSystem.Instance.Load(_slotIndex);
-            SaveSystem.Instance.ApplySave(data);
+            if (SaveSystem.Instance.HasSave(_slotIndex))
+                SaveSystem.Instance.SetPendingLoad(_slotIndex);
+            else
+                SaveSystem.Instance.SetActiveSlot(_slotIndex);
+
+            SceneLoader.Instance.LoadScene(GameSceneName);
         }
         else
         {
-            SaveSystem.Instance.Save(_slotIndex, $"Save {_slotIndex}");
+            // In-game: save current state to this slot
+            SaveSystem.Instance.Save(_slotIndex, $"Wave {WaveManager.Instance.CurrentWave}");
+            Initialize(_slotIndex); // Refresh the UI to show new save
         }
     }
 
