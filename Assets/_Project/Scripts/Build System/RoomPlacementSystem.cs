@@ -115,7 +115,14 @@ public class RoomPlacementSystem : MonoBehaviour
         
         // Position
         var worldPos = GridManager.Instance.GridToWorld(_currentOrigin);
-        _currentGhost.transform.position = worldPos;
+
+        var offset = new Vector3(
+            (size.x - 1) * GridManager.Instance.CellSize * 0.5f,
+            0,
+            (size.y - 1) * GridManager.Instance.CellSize * 0.5f
+        );
+        
+        _currentGhost.transform.position = worldPos + offset;
         
         // Rotation
         _currentGhost.transform.rotation = Quaternion.Euler(0f, _rotationIndex * 90f, 0f);

@@ -95,14 +95,13 @@ public class BuildManager : MonoBehaviour
         
         CurrentMode = newMode;
 
-        OnModeChanged(newMode);
-
         OnModeChanged?.Invoke(CurrentMode);
     }
 
     public void SelectRoom(RoomBlueprint room)
     {
         SelectedRoom = room;
+        SelectedTrap = null;
     }
     
     public void SelectTrap(TrapBlueprint trap)
@@ -114,6 +113,7 @@ public class BuildManager : MonoBehaviour
     public void ClearSelection()
     {
         SelectedRoom = null;
+        SelectedTrap = null;
     }
     
     #region Setters
