@@ -23,7 +23,15 @@ public class InitialRoomPlacer : MonoBehaviour
         if (!roomsParent)
             return;
         
-        PlaceRoom(coreRoom, corePosition);
+        var core = PlaceRoom(coreRoom, corePosition);
+
+        if (core)
+        {
+            var coreComponent = core.GetComponentInChildren<Core>();
+            
+            if (coreComponent)
+                CoreHealthUIBinder.Instance.Bind(coreComponent);
+        }
 
         var revivalPos = corePosition + revivalOffset;
         PlaceRoom(revivalRoom, revivalPos);

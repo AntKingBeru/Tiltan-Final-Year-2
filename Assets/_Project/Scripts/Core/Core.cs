@@ -1,8 +1,22 @@
 using UnityEngine;
+using System;
 
 public class Core : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float health = 500f;
+    [SerializeField] private float maxHealth = 500f;
+
+    private float _currentHealth;
+    
+    public float CurrentHealth => _currentHealth;
+    public float MaxMaxHealth => maxHealth;
+    public float HealthPercent => _currentHealth / maxHealth;
+    
+    public event Action<float> OnHealthChanged;
+
+    private void Awake()
+    {
+        _currentHealth = maxHealth;
+    }
 
     private void Start()
     {
@@ -11,9 +25,12 @@ public class Core : MonoBehaviour, IDamageable
     
     public void TakeDamage(float damage)
     {
-        health -= damage;
+        _currentHealth -= damage;
+        _currentHealth = Mathf.Max(_currentHealth, 0f);
 
-        if (health <= 0)
+        OnHealthChanged?.Invoke(HealthPercent);
+
+        if (_currentHealth <= 0)
             OnDestroyed();
     }
 
