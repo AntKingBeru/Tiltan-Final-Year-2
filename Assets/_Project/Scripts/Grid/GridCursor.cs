@@ -19,8 +19,9 @@ public class GridCursor : MonoBehaviour
 
     private void Update()
     {
-        if (!BuildManager.Instance.IsBuildMode)
+        if (!BuildManager.Instance.IsClearMode)
         {
+            ClearHighlight();
             SetVisible(false);
             return;
         }
@@ -51,7 +52,6 @@ public class GridCursor : MonoBehaviour
         
         // Move cursor
         var pos = GridManager.Instance.GridToWorld(gridPos);
-        pos += new Vector3(2f, 0f, 2f);
         transform.position = pos;
         
         // Highlight logic
@@ -69,7 +69,7 @@ public class GridCursor : MonoBehaviour
     private void HighlightCell(GridCell cell)
 
     {
-        var isValid = cell.CellType == CellType.Cleared;
+        var isValid = cell.CellType == CellType.Blocked;
 
         _currentView.SetHighlight(isValid ? validColor : invalidColor);
     }

@@ -11,6 +11,19 @@ public class BuildButtonUI : MonoBehaviour
     private RoomBlueprint _room;
     private TrapBlueprint _trap;
 
+    private void OnEnable()
+    {
+        if (ResourceManager.Instance)
+            ResourceManager.Instance.OnResourcesChanged += UpdateInteractable;
+        UpdateInteractable();
+    }
+
+    private void OnDisable()
+    {
+        if (ResourceManager.Instance)
+            ResourceManager.Instance.OnResourcesChanged -= UpdateInteractable;
+    }
+
     public void Setup(RoomBlueprint room)
     {
         _room = room;
@@ -19,12 +32,8 @@ public class BuildButtonUI : MonoBehaviour
         label.text = room.name;
         costText.text = $"S:{room.stoneCost} W:{room.woodCost}";
 
-        button.onClick.AddListener(() =>
-        {
-            BuildManager.Instance.SelectRoom(_room);
-        });
-        
-        button.interactable = ResourceManager.Instance.CanAfford(room.stoneCost, room.woodCost);
+        SetUpButton();
+        UpdateInteractable();
     }
     
     public void Setup(TrapBlueprint trap)
@@ -35,11 +44,37 @@ public class BuildButtonUI : MonoBehaviour
         label.text = trap.name;
         costText.text = $"S:{trap.stoneCost} W:{trap.woodCost}";
         
+        SetUpButton();
+        UpdateInteractable();
+    }
+
+    private void SetUpButton()
+    {
+        button.onClick.RemoveAllListeners();
+
         button.onClick.AddListener(() =>
         {
-            BuildManager.Instance.SelectTrap(_trap);
+            if (_room)
+                BuildManager.Instance.SelectRoom(_room);
+            else if (_trap)
+                BuildManager.Instance.SelectTrap(_trap);
         });
+    }
+
+    private void UpdateInteractable()
+    {
+        if (!ResourceManager.Instance)
+            return;
+
+        var canAfford = false;
         
-        button.interactable = ResourceManager.Instance.CanAfford(trap.stoneCost, trap.woodCost);
+        if (_room)
+            canAfford = ResourceManager.Instance.CanAfford(_room.stoneCost, _room.woodCost);
+        else if (_trap)
+            canAfford = ResourceManager.Instance.CanAfford(_trap.stoneCost, _trap.woodCost);
+        
+        button.interactable = canAfford;
+        
+        costText.alpha = canAfford ? 1f : 0.5f;
     }
 }

@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
+    
+    public event Action OnResourcesChanged;
 
     [Header("Resources")]
     [SerializeField] private int stone;
@@ -13,6 +16,11 @@ public class ResourceManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void NotifyChanged()
+    {
+        OnResourcesChanged?.Invoke();
     }
     
     #region Add Resources
@@ -32,17 +40,22 @@ public class ResourceManager : MonoBehaviour
                     wood = _maxCapacity;
                 break;
         }
+        
+        NotifyChanged();
     }
 
     public void IncreaseCapacity(int bonus)
     {
         _maxCapacity += bonus;
+        NotifyChanged();
     }
 
     public void Set(int newStone, int newWood)
     {
         stone = newStone;
         wood = newWood;
+        
+        NotifyChanged();
     }
     
     #endregion
@@ -61,6 +74,8 @@ public class ResourceManager : MonoBehaviour
         
         stone -= stoneCost;
         wood -= woodCost;
+        
+        NotifyChanged();
         return true;
     }
     

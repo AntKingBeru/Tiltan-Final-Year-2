@@ -15,6 +15,8 @@ public class GridCellView : MonoBehaviour
     
     private GridCell _cell;
     private Color _originalColor;
+    
+    private bool _isHighlighted;
 
     public void Initialize(GridCell cell)
     {
@@ -30,6 +32,8 @@ public class GridCellView : MonoBehaviour
     {
         if (_cell == null)
             return;
+
+        ClearHighlight();
         
         switch (_cell.CellType)
         {
@@ -58,12 +62,21 @@ public class GridCellView : MonoBehaviour
 
     public void SetHighlight(Color color)
     {
-        _originalColor = meshRenderer.sharedMaterial.color;
+        if (!_isHighlighted)
+        {
+            _originalColor = meshRenderer.sharedMaterial.color;
+            _isHighlighted = true;
+        }
+        
         meshRenderer.sharedMaterial.color = color;
     }
 
     public void ClearHighlight()
     {
-        meshRenderer.sharedMaterial.color = _originalColor;
+        if (_isHighlighted)
+        {
+            meshRenderer.sharedMaterial.color = _originalColor;
+            _isHighlighted = false;
+        }
     }
 }

@@ -191,6 +191,7 @@ public class GridManager : MonoBehaviour
         if (cell is not { CellType: CellType.Blocked })
             return;
         
+        cell.View.ClearHighlight();
         cell.CellType = CellType.Cleared;
         cell.View.UpdateView();
 
@@ -204,6 +205,7 @@ public class GridManager : MonoBehaviour
         if (cell == null)
             return;
         
+        cell.View.ClearHighlight();
         cell.CellType = CellType.Occupied;
         cell.View.UpdateView();
     }
@@ -223,6 +225,7 @@ public class GridManager : MonoBehaviour
 
                 if (cell.CellType == CellType.Blocked)
                 {
+                    cell.View.ClearHighlight();
                     cell.CellType = CellType.Cleared;
                     cell.View.UpdateView();
                 }
