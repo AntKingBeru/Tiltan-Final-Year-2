@@ -433,6 +433,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7041287755698089379, guid: 7a318391d7273754c8106514a8f88bb8, type: 3}
   m_PrefabInstance: {fileID: 1547087911}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &681890473
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 681890475}
+  - component: {fileID: 681890474}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &681890474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681890473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab124af44412994d8459a450e389bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::sfxManager
+  minionDeathSound: {fileID: 0}
+  enemyDeathSound: {fileID: 0}
+  defeatSound: {fileID: 0}
+  victorySound: {fileID: 0}
+  hpDownSound: {fileID: 0}
+  minionAttackSound: {fileID: 0}
+  enemyAttackSound: {fileID: 0}
+  bossDeathSound: {fileID: 0}
+  bossVictorySound: {fileID: 0}
+  bossAttackSound: {fileID: 0}
+  clickUiSound: {fileID: 0}
+  audioSource: {fileID: 0}
+--- !u!4 &681890475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681890473}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.33578, y: -0, z: 33.02187}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &757973100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,3 +1511,4 @@ SceneRoots:
   - {fileID: 502566181}
   - {fileID: 1524615059}
   - {fileID: 2044527146}
+  - {fileID: 681890475}
