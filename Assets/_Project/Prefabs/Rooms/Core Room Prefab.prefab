@@ -608,7 +608,7 @@ MonoBehaviour:
   m_GenerateLinks: 0
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
-  m_AffectedAgents: f2652fae
+  m_AffectedAgents: f2652fae00000000
 --- !u!114 &5474960895422620772
 MonoBehaviour:
   m_ObjectHideFlags: 0

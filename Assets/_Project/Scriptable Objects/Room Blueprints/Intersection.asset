@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677d6bbab2e04ab498fc1175bf969631, type: 3}
   m_Name: Intersection
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
-  prefab: {fileID: 0}
-  size: {x: 1, y: 1}
+  prefab: {fileID: 1019145297813069693, guid: b42bbac4f4ef7d04ab03288d1fb314a2, type: 3}
+  size: {x: 3, y: 3}
   blueprintId: Intersection
-  stoneCost: 3
+  stoneCost: 5
   woodCost: 2
   blocksEnemies: 0

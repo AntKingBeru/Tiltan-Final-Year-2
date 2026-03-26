@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677d6bbab2e04ab498fc1175bf969631, type: 3}
   m_Name: Hallway
   m_EditorClassIdentifier: Assembly-CSharp::RoomBlueprint
-  prefab: {fileID: 0}
-  size: {x: 1, y: 1}
+  prefab: {fileID: 6834178816587768776, guid: 115f9f95fbde6294d87819e7ff3aa873, type: 3}
+  size: {x: 3, y: 3}
   blueprintId: Hallway
   stoneCost: 3
   woodCost: 3
