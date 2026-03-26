@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
@@ -45,43 +46,58 @@ public class PlayerController : MonoBehaviour
         
         _moveRequested = false;
 
-        if (BuildManager.Instance.IsBuildMode)
-            return;
-
-        if (BuildManager.Instance.IsClearMode)
-        {
-            TryClear();
-            return;
-        }
-
         if (IsPointerOverUI())
             return;
-        
-        var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        
-        if (!Physics.Raycast(ray, out var hit, 100f))
-            return;
-        
-        agent.SetDestination(hit.point);
+
+        HandleClick();
     }
 
     private bool IsPointerOverUI()
     {
-        return EventSystem.current && EventSystem.current.IsPointerOverGameObject();
+        if (!EventSystem.current)
+            return false;
+
+        var pointerEventData = new PointerEventData(EventSystem.current)
+        {
+            position = Mouse.current.position.ReadValue()
+        };
+
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, results);
+        
+        return results.Count > 0;
     }
 
-    private void TryClear()
+    private void HandleClick()
     {
-        if (IsPointerOverUI())
-            return;
-        
         var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (!Physics.Raycast(ray, out var hit, 100f))
             return;
 
         var gridPos = GridManager.Instance.WorldToGrid(hit.point);
-        GridManager.Instance.ClearCell(gridPos);
+
+        switch (BuildManager.Instance.CurrentMode)
+        {
+            case BuildMode.Clear:
+                GridManager.Instance.ClearCell(gridPos);
+                break;
+            case BuildMode.Upgrade:
+                HandleUpgrade(hit);
+                break;
+            case BuildMode.Build:
+                break;
+            case BuildMode.None:
+            default:
+                agent.SetDestination(hit.point);
+                break;
+        }
+    }
+
+    private void HandleUpgrade(RaycastHit hit)
+    {
+        if (hit.collider.TryGetComponent<Room>(out var room))
+            room.Upgrade();
     }
     
     public bool TryPickUpCorpse(EnemyCorpse corpse)

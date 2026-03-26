@@ -59,7 +59,7 @@ public class Room : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!BuildManager.Instance.IsBuildMode)
+        if (!BuildManager.Instance.IsUpgradeMode)
             BuildManager.Instance.UpgradeUI.Show(this);
     }
 

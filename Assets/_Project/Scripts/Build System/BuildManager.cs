@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,10 +8,13 @@ public class BuildManager : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference buildToggleAction;
+    [SerializeField] private InputActionReference cancelAction;
     
     [SerializeField] private UpgradeUI upgradeUI;
 
     public BuildMode CurrentMode { get; private set; }
+    
+    public Action<BuildMode> OnModeChanged;
     
     public bool IsClearMode => CurrentMode == BuildMode.Clear;
     public bool IsBuildMode => CurrentMode == BuildMode.Build;
@@ -30,21 +34,70 @@ public class BuildManager : MonoBehaviour
     private void OnEnable()
     {
         buildToggleAction.action.Enable();
+        cancelAction.action.Enable();
+        
         buildToggleAction.action.performed += OnToggleBuild;
+        cancelAction.action.performed += OnCancel;
     }
     
     private void OnDisable()
     {
         buildToggleAction.action.performed -= OnToggleBuild;
+        cancelAction.action.performed -= OnCancel;
+        
         buildToggleAction.action.Disable();
+        cancelAction.action.Disable();
     }
 
     private void OnToggleBuild(InputAction.CallbackContext context)
     {
-        if (CurrentMode == BuildMode.Build)
-            SetNone();
-        else
-            SetBuildMode();
+        CycleMode();
+    }
+
+    private void CycleMode()
+    {
+        switch (CurrentMode)
+        {
+            case BuildMode.None:
+                SetMode(BuildMode.Clear);
+                break;
+            case BuildMode.Clear:
+                SetMode(BuildMode.Build);
+                break;
+            case BuildMode.Build:
+                SetMode(BuildMode.Upgrade);
+                break;
+            case BuildMode.Upgrade:
+                SetMode(BuildMode.None);
+                break;
+        }
+    }
+
+    private void OnCancel(InputAction.CallbackContext context)
+    {
+        Cancel();
+    }
+
+    public void Cancel()
+    {
+        SetNone();
+        
+        ClearSelection();
+        
+        if (upgradeUI)
+            upgradeUI.Hide();
+    }
+
+    public void SetMode(BuildMode newMode)
+    {
+        if (CurrentMode == newMode)
+            return;
+        
+        CurrentMode = newMode;
+
+        OnModeChanged(newMode);
+
+        OnModeChanged?.Invoke(CurrentMode);
     }
 
     public void SelectRoom(RoomBlueprint room)
@@ -65,13 +118,13 @@ public class BuildManager : MonoBehaviour
     
     #region Setters
     
-    public void SetClearMode() => CurrentMode = BuildMode.Clear;
+    public void SetClearMode() => SetMode(BuildMode.Clear);
     
-    public void SetBuildMode() => CurrentMode = BuildMode.Build;
+    public void SetBuildMode() => SetMode(BuildMode.Build);
     
-    public void SetUpgradeMode() => CurrentMode = BuildMode.Upgrade;
+    public void SetUpgradeMode() => SetMode(BuildMode.Upgrade);
     
-    public void SetNone() => CurrentMode = BuildMode.None;
+    public void SetNone() => SetMode(BuildMode.None);
     
     #endregion
 }

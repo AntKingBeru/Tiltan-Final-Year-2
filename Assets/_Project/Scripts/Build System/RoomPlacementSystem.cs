@@ -5,6 +5,8 @@ using Unity.AI.Navigation;
 
 public class RoomPlacementSystem : MonoBehaviour
 {
+    public static RoomPlacementSystem Instance { get; private set; }
+    
     private const string EnemyWalkable = "EnemyWalkable";
     private const string MinionWalkable = "MinionWalkable";
     
@@ -27,6 +29,11 @@ public class RoomPlacementSystem : MonoBehaviour
     private int _rotationIndex;
     private float _lastRotationTime;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+    
     private void OnEnable()
     {
         rotateAction.action.Enable();

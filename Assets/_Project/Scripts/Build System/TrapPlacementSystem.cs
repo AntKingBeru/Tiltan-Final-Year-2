@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class TrapPlacementSystem : MonoBehaviour
 {
+    public static TrapPlacementSystem Instance { get; private set; }
+    
     [Header("Input")]
     [SerializeField] private InputActionReference placeAction;
     
@@ -16,6 +18,11 @@ public class TrapPlacementSystem : MonoBehaviour
     
     private RoomGhost _currentGhost;
     private TrapAnchor _currentAnchor;
+    
+    private void Awake()
+    {
+        Instance = this;
+    }
     
     private void OnEnable()
     {
