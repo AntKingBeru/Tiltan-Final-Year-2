@@ -1028,17 +1028,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ab124af44412994d8459a450e389bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::sfxManager
-  minionDeathSound: {fileID: 0}
-  enemyDeathSound: {fileID: 0}
-  defeatSound: {fileID: 0}
-  victorySound: {fileID: 0}
-  hpDownSound: {fileID: 0}
-  minionAttackSound: {fileID: 0}
-  enemyAttackSound: {fileID: 0}
-  bossDeathSound: {fileID: 0}
-  bossVictorySound: {fileID: 0}
-  bossAttackSound: {fileID: 0}
-  clickUiSound: {fileID: 0}
+  minionDeathSound: {fileID: 8300000, guid: cfb81268878a5414fb6579722a4f1922, type: 3}
+  enemyDeathSound: {fileID: 8300000, guid: 9b8fee157d136034fa77111dfa583353, type: 3}
+  defeatSound: {fileID: 8300000, guid: 1fe5c7b90dfbd0d46afb61bf26a24bdf, type: 3}
+  victorySound: {fileID: 8300000, guid: 54a9dfa1da5c7c44eb8ce5e533fd0c2d, type: 3}
+  hpDownSound: {fileID: 8300000, guid: ecf24939dc7f30040bee93a81faef02c, type: 3}
+  minionAttackSound: {fileID: 8300000, guid: 22840e10392e80345b090f8003d60c56, type: 3}
+  enemyAttackSound: {fileID: 8300000, guid: 4d2f69f8150e43249a8cd19788c4d2c6, type: 3}
+  bossDeathSound: {fileID: 8300000, guid: d9a49e4eeaaf4ed4b8569e2b60aa65a2, type: 3}
+  bossVictorySound: {fileID: 8300000, guid: 57f65499d3762ab4d894fc3ee8c897de, type: 3}
+  bossAttackSound: {fileID: 8300000, guid: 91e52f2b302646445a2697797b5dda50, type: 3}
+  clickUiSound: {fileID: 8300000, guid: 32f1d623950f5e44c811d3215965ddf0, type: 3}
   audioSource: {fileID: 1014839987}
 --- !u!4 &1014839989
 Transform:
